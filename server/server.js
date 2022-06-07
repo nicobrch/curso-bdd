@@ -4,9 +4,11 @@ const app = express();
 const cors = require("cors");
 const axios = require("axios");
 const pool = require("./db");
-const osuApi = require("osuApi")
+const osuApi = require("./osuApi")
 
-//middleware
+/*
+    middleware
+ */
 app.use(cors());
 app.use(express.json());
 
@@ -23,17 +25,19 @@ app.get('/auth2', (req, res) => {
     We exchange the callback code for an user Api token
  */
 app.get('/auth2-callback', ({query: { code } }, res) => {
-    //the osu oauth redirects to our redirect uri with a code
-    //we exchange the code for an user token with osuApi.getToken
-    //then we use the user token to request the user api data with getUserMe
-    //finally we post to our own express server the data we just got
+    /*
+        osu redirects the user to our page with a code
+        we exchange the code for an user token with osuApi.getToken
+        then we use the token to make an api request and get the user data
+        finally we post to our own express server
+     */
     osuApi.getToken(code)
         .then((token) => {
             osuApi.getUserMe(token)
                 .then ((_res) => {
                     let data = _res.data;
                     let user = osuApi.parseUserJson(data);
-                    axios.post("http://localhost:3001/api/v1/usuario", {body: JSON.stringify(user)})
+                    axios.post("http://localhost:3001/api/v1/usuario", JSON.stringify(user))
                         .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));
@@ -45,13 +49,19 @@ app.get('/auth2-callback', ({query: { code } }, res) => {
 /*
     Insert new user
  */
-app.post("/api/v1/usuario", (req, res) => {
-    let userApi = JSON.parse(req.body.body);
-    console.log(userApi);
-    res.status(201).json({
-        status: "success",
-        data: {}
-    })
+app.post("/api/v1/usuario", async (req, res) => {
+    try {
+        const userApi = JSON.parse(req.data);
+        console.log(userApi);
+        /*
+        const newUser = await pool.query(
+            "INSER INTO usuario VALUES($1)"
+        )
+         */
+
+    } catch (err) {
+        console.error(err.message);
+    }
 })
 
 app.listen(3001, () => {

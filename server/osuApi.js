@@ -3,7 +3,7 @@ require('dotenv').config()
 const axios = require("axios");
 const apiURL = "https://osu.ppy.sh/api/v2";
 
-const getToken = async (code) => {
+async function getToken(code){
     const body = {
         client_id: process.env.API_CLIENT_ID,
         client_secret: process.env.API_CLIENT_SECRET,
@@ -20,7 +20,7 @@ const getToken = async (code) => {
     return await axios.post('https://osu.ppy.sh/oauth/token', body, params).then((_res) => _res.data.access_token);
 }
 
-const getUserMe = async (token) => {
+async function getUserMe(token){
     const meUrl = apiURL + '/me/osu';
     const headers = {
         "Content-Type": 'application/json',
@@ -30,7 +30,7 @@ const getUserMe = async (token) => {
     return await axios.get(meUrl, {headers: headers});
 }
 
-const parseUserJson = (data) => {
+function parseUserJson(data){
     return {
         id: data['id'],
         username: data['username'],
@@ -46,4 +46,4 @@ const parseUserJson = (data) => {
     }
 }
 
-module.exports = { getToken, getUserMe, parseUserJson };
+module.exports = {getToken, getUserMe, parseUserJson};
