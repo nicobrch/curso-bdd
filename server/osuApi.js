@@ -3,6 +3,7 @@ require('dotenv').config()
 const axios = require("axios");
 const apiURL = "https://osu.ppy.sh/api/v2";
 const tokenURL = "https://osu.ppy.sh/oauth/token";
+const usuarioURL = "http://localhost:3001/api/v1/usuario";
 
 async function getMeToken(code){
     const body = {
@@ -59,7 +60,7 @@ const getUserApi = async (token, id) => {
     return await axios.get(userUrl, {headers: headers});
 }
 
-function parseUserJson(data){
+const parseUserJson = (data) => {
     return {
         id: data['id'],
         username: data['username'],
@@ -74,4 +75,36 @@ function parseUserJson(data){
     }
 }
 
-module.exports = {getMeToken, getUserMe, parseUserJson, getToken, getUserApi};
+const postUser = async (data) => {
+    let user = parseUserJson(data);
+    return await axios.post(usuarioURL, {
+        id : parseInt(user.id),
+        username : (user.username).toString(),
+        pp : parseInt(user.pp),
+        global_rank : parseInt(user.global_rank),
+        country_rank : parseInt(user.country_rank),
+        badges : user.badges,
+        playcount : parseInt(user.playcount),
+        play_time : parseInt(user.play_time),
+        avatar_url : (user.avatar_url).toString(),
+        country : (user.country).toString(),
+    });
+}
+
+const updateUser = async (data, userId) => {
+    let user = parseUserJson(data);
+    return await axios.put(usuarioURL+'/'+userId, {
+        id : parseInt(user.id),
+        username : (user.username).toString(),
+        pp : parseInt(user.pp),
+        global_rank : parseInt(user.global_rank),
+        country_rank : parseInt(user.country_rank),
+        badges : user.badges,
+        playcount : parseInt(user.playcount),
+        play_time : parseInt(user.play_time),
+        avatar_url : (user.avatar_url).toString(),
+        country : (user.country).toString(),
+    });
+}
+
+module.exports = {getMeToken, getUserMe, parseUserJson, getToken, getUserApi, postUser};
