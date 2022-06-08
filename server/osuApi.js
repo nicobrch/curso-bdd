@@ -9,7 +9,7 @@ async function getToken(code){
         client_secret: process.env.API_CLIENT_SECRET,
         code: code,
         grant_type: "authorization_code",
-        redirect_uri: "http://localhost:5000/oauth-callback/"
+        redirect_uri: "http://localhost:3001/oauth-callback/"
     };
     const params = {
         headers : {
@@ -41,8 +41,7 @@ function parseUserJson(data){
         playcount: data['statistics']['play_count'],
         play_time: data['statistics']['play_time'],
         avatar_url: data['avatar_url'],
-        country_code: data['country']['code'],
-        joined_date: data['join_date']
+        country: data['country']['name'],
     }
 }
 
