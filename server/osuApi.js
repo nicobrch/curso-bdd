@@ -2,8 +2,9 @@
 require('dotenv').config()
 const axios = require("axios");
 const apiURL = "https://osu.ppy.sh/api/v2";
+const tokenURL = "https://osu.ppy.sh/oauth/token";
 
-async function getToken(code){
+async function getMeToken(code){
     const body = {
         client_id: process.env.API_CLIENT_ID,
         client_secret: process.env.API_CLIENT_SECRET,
@@ -17,7 +18,7 @@ async function getToken(code){
             "Content-Type": "application/json"
         }
     };
-    return await axios.post('https://osu.ppy.sh/oauth/token', body, params).then((_res) => _res.data.access_token);
+    return await axios.post(tokenURL, body, params).then((_res) => _res.data.access_token);
 }
 
 async function getUserMe(token){
@@ -28,6 +29,34 @@ async function getUserMe(token){
         Authorization: 'Bearer ' + token
     };
     return await axios.get(meUrl, {headers: headers});
+}
+
+async function getToken(){
+    let body = {
+        "client_id": process.env.API_CLIENT_ID,
+        "client_secret": process.env.API_CLIENT_SECRET,
+        "grant_type": "client_credentials",
+        "scope": "public"
+    }
+
+    const params = {
+        headers : {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    };
+
+    return await axios.post(tokenURL, body, params).then((_res) => _res.data.access_token);
+}
+
+const getUserApi = async (token, id) => {
+    const userUrl = apiURL + '/users/' + id + '/osu';
+    const headers = {
+        "Content-Type": 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token
+    };
+    return await axios.get(userUrl, {headers: headers});
 }
 
 function parseUserJson(data){
@@ -45,4 +74,4 @@ function parseUserJson(data){
     }
 }
 
-module.exports = {getToken, getUserMe, parseUserJson};
+module.exports = {getMeToken, getUserMe, parseUserJson, getToken, getUserApi};

@@ -22,7 +22,7 @@ app.get('/oauth', (req, res) => {
 })
 
 /*
-    We exchange the callback code for an user Api token
+    Get callback code and get user data with token
  */
 app.get('/oauth-callback', ({query: { code } }, res) => {
     /*
@@ -31,7 +31,7 @@ app.get('/oauth-callback', ({query: { code } }, res) => {
         then we use the token to make an api request and get the user data
         finally we post to our own express server
      */
-    osuApi.getToken(code)
+    osuApi.getMeToken(code)
         .then((token) => {
             osuApi.getUserMe(token)
                 .then ((_res) => {
@@ -58,18 +58,55 @@ app.get('/oauth-callback', ({query: { code } }, res) => {
 });
 
 /*
-    Insert new user
+   Ingresar usuario desde administrador con ID
+ */
+app.get('/admin/usuario/:id', (req, res) => {
+   let userId = req.params.id;
+
+    osuApi.getToken()
+        .then((token) => {
+            osuApi.getUserApi(token, userId)
+                .then ((_res) => {
+                    let data = _res.data;
+                    let user = osuApi.parseUserJson(data);
+                    axios.post("http://localhost:3001/api/v1/usuario", {
+                       id : parseInt(user.id),
+                       username : (user.username).toString(),
+                       pp : parseInt(user.pp),
+                       global_rank : parseInt(user.global_rank),
+                       country_rank : parseInt(user.country_rank),
+                       badges : user.badges,
+                       playcount : parseInt(user.playcount),
+                       play_time : parseInt(user.play_time),
+                       avatar_url : (user.avatar_url).toString(),
+                       country : (user.country).toString(),
+                    })
+                        .catch(err => console.log(err));
+                })
+                .catch(err => console.log(err));
+            res.redirect("/");
+        })
+        .catch(err => console.log(err))
+});
+
+/*
+    Insert new user with OAuth
  */
 app.post("/api/v1/usuario", async (req, res) => {
     try {
         const body = req.body;
-        console.log(body);
         const newUser = await pool.query(
             `INSERT INTO usuario(id, username, pp, global_rank, country_rank, playcount, play_time, avatar_url, created_at, updated_at, country) VALUES(${body.id}, '${body.username}', ${body.pp}, ${body.global_rank}, ${body.country_rank}, ${body.playcount}, ${body.play_time}, '${body.avatar_url}', current_timestamp, current_timestamp, '${body.country}')`
         );
-        res.json(newUser.rows[0]);
+        if (body.badges.length !== 0){
+           for (let i=0; i<body.badges.length; i++){
+              `INSERT INTO usuario_badge(user_id, awarded_at, descripcion, image_url, url) VALUES (${body.id}, ${body.badge[i].awarded_at}, '${body.badge[i].description}', '${body.badge[i].image_url}', '${body.badge[i].url}')`
+           }
+        }
+        res.status(200).json(newUser.rows[0]);
     } catch (err) {
         console.error(err.message);
+        res.status(500).send('Algo salio mal :(');
     }
 })
 
