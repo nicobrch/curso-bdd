@@ -38,17 +38,16 @@ app.get('/oauth-callback', ({query: { code } }, res) => {
                     let data = _res.data;
                     let user = osuApi.parseUserJson(data);
                     axios.post("http://localhost:3001/api/v1/usuario", {
-                       id : user.id,
-                       username: user.username,
-                       pp: user.pp,
-                       global_rank: user.global_rank,
-                       country_rank: user.country_rank,
-                       badges: user.badges,
-                       playcount: user.playcount,
-                       play_time: user.play_time,
-                       avatar_url: user.avatar_url,
-                       country: user.country,
-                       joined_date: user.joined_date
+                       id : parseInt(user.id),
+                       username : (user.username).toString(),
+                       pp : parseInt(user.pp),
+                       global_rank : parseInt(user.global_rank),
+                       country_rank : parseInt(user.country_rank),
+                       badges : user.badges,
+                       playcount : parseInt(user.playcount),
+                       play_time : parseInt(user.play_time),
+                       avatar_url : (user.avatar_url).toString(),
+                       country : (user.country).toString(),
                     })
                         .catch(err => console.log(err));
                 })
@@ -64,10 +63,11 @@ app.get('/oauth-callback', ({query: { code } }, res) => {
 app.post("/api/v1/usuario", async (req, res) => {
     try {
         const body = req.body;
+        console.log(body);
         const newUser = await pool.query(
-            `INSERT INTO usuario(id, username, pp, global_rank, country_rank, playcount, play_time, avatar_url, created_at, updated_at) VALUES ${body.id}, ${body.username}, ${body.pp}, ${body.global_rank}, ${body.country_rank}, ${body.playcount}, ${body.play_time}, ${body.avatar_url}, current_timestamp, current_timestamp`
-        )
-
+            `INSERT INTO usuario(id, username, pp, global_rank, country_rank, playcount, play_time, avatar_url, created_at, updated_at, country) VALUES(${body.id}, '${body.username}', ${body.pp}, ${body.global_rank}, ${body.country_rank}, ${body.playcount}, ${body.play_time}, '${body.avatar_url}', current_timestamp, current_timestamp, '${body.country}')`
+        );
+        res.json(newUser.rows[0]);
     } catch (err) {
         console.error(err.message);
     }
