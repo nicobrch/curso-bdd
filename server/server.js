@@ -99,8 +99,14 @@ app.post("/api/v1/usuario", async (req, res) => {
             `INSERT INTO usuario(id, username, pp, global_rank, country_rank, playcount, play_time, avatar_url, created_at, updated_at, country) VALUES(${body.id}, '${body.username}', ${body.pp}, ${body.global_rank}, ${body.country_rank}, ${body.playcount}, ${body.play_time}, '${body.avatar_url}', current_timestamp, current_timestamp, '${body.country}')`
         );
         if (body.badges.length !== 0){
-           for (let i=0; i<body.badges.length; i++){
-              `INSERT INTO usuario_badge(user_id, awarded_at, descripcion, image_url, url) VALUES (${body.id}, ${body.badge[i].awarded_at}, '${body.badge[i].description}', '${body.badge[i].image_url}', '${body.badge[i].url}')`
+           for (let i=0; i< body.badges.length; i++){
+              try {
+                 await pool.query(
+                  `INSERT INTO usuario_badge(user_id, descripcion, image_url) VALUES (${body.id}, '${body.badges[i].description}', '${body.badges[i].image_url}')`
+              );
+              } catch (err) {
+                 console.error(err.message);
+              }
            }
         }
         res.status(200).json(newUser.rows[0]);
