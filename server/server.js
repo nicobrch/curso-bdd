@@ -102,6 +102,38 @@ app.put('/api/v1/usuario/:id', async (req, res) => {
 })
 
 /*
+    Get all users
+ */
+app.get('/api/v1/usuario', async (req, res) => {
+   try {
+      const allUsers = await pool.query(
+            `SELECT * from usuario`
+      );
+      res.status(200).json(allUsers.rows);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
+})
+
+/*
+    Get one user by ID
+ */
+app.get('/api/v1/usuario/:id', async (req, res) => {
+   try {
+      const userId = req.params.id;
+
+      const user = await pool.query(
+            `SELECT * from usuario WHERE id = ${userId}`
+      );
+      res.status(200).json(user.rows[0]);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
+})
+
+/*
     Insert new torneo
  */
 app.post('/api/v1/torneo', async (req, res) => {
@@ -135,6 +167,38 @@ app.put('/api/v1/torneo/:id', async (req, res) => {
 })
 
 /*
+    Get all torneos
+ */
+app.get('/api/v1/torneo', async (req, res) => {
+   try {
+      const allTorneos = await pool.query(
+            `SELECT * from torneo`
+      );
+      res.status(200).json(allTorneos.rows);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
+})
+
+/*
+    Get one torneo by ID
+ */
+app.get('/api/v1/torneo/:id', async (req, res) => {
+   try {
+      const torneoId = req.params.id;
+
+      const torneo = await pool.query(
+            `SELECT * from torneo WHERE id = ${torneoId}`
+      );
+      res.status(200).json(torneo.rows[0]);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
+})
+
+/*
     Insert new periferico
  */
 app.post('/api/v1/periferico', async (req, res) => {
@@ -165,6 +229,38 @@ app.put('/api/v1/periferico/:id', async (req, res) => {
         console.error(err.message);
         res.status(500).send('Algo salio mal :(');
     }
+})
+
+/*
+    Get all perifericos
+ */
+app.get('/api/v1/periferico', async (req, res) => {
+   try {
+      const allPerifericos = await pool.query(
+            `SELECT * from periferico`
+      );
+      res.status(200).json(allPerifericos.rows);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
+})
+
+/*
+    Get one periferico by ID
+ */
+app.get('/api/v1/periferico/:id', async (req, res) => {
+   try {
+      const perifericoId = req.params.id;
+
+      const periferico = await pool.query(
+            `SELECT * from periferico WHERE id = ${perifericoId}`
+      );
+      res.status(200).json(periferico.rows[0]);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
 })
 
 app.listen(3001, () => {
