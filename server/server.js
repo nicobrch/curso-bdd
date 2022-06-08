@@ -90,7 +90,7 @@ app.get('/admin/usuario/:id', (req, res) => {
 });
 
 /*
-    Insert new user with OAuth
+    Insert new user from API data
  */
 app.post("/api/v1/usuario", async (req, res) => {
     try {
@@ -110,6 +110,22 @@ app.post("/api/v1/usuario", async (req, res) => {
            }
         }
         res.status(200).json(newUser.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Algo salio mal :(');
+    }
+})
+
+/*
+    Insert new torneo
+ */
+app.post("/api/v1/torneo", async (req, res) => {
+    try {
+        const body = req.body;
+        const newTorneo = await pool.query(
+            `INSERT INTO torneo(name, rank_range, badged, prizepool, bws, url, spreadsheet_url, cierre_regs, formato, cover_url, descripcion) VALUES ('${body.name}', '${body.rank_range}', ${body.badged}, '${body.prizepool}', ${body.bws}, '${body.url}', '${body.spreadsheet_url}', '${body.cierre_regs}', '${body.formato}', '${body.cover_url}', '${body.descripcion}')`
+        )
+        res.status(200).json(newTorneo.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Algo salio mal :(');
