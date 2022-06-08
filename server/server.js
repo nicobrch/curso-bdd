@@ -36,51 +36,7 @@ app.get('/oauth-callback', ({query: { code } }, res) => {
             osuApi.getUserMe(token)
                 .then ((_res) => {
                     let data = _res.data;
-                    let user = osuApi.parseUserJson(data);
-                    axios.post("http://localhost:3001/api/v1/usuario", {
-                       id : parseInt(user.id),
-                       username : (user.username).toString(),
-                       pp : parseInt(user.pp),
-                       global_rank : parseInt(user.global_rank),
-                       country_rank : parseInt(user.country_rank),
-                       badges : user.badges,
-                       playcount : parseInt(user.playcount),
-                       play_time : parseInt(user.play_time),
-                       avatar_url : (user.avatar_url).toString(),
-                       country : (user.country).toString(),
-                    })
-                        .catch(err => console.log(err));
-                })
-                .catch(err => console.log(err));
-            res.redirect("/");
-        })
-        .catch(err => console.log(err))
-});
-
-/*
-   Ingresar usuario desde administrador con ID
- */
-app.get('/admin/usuario/:id', (req, res) => {
-   let userId = req.params.id;
-
-    osuApi.getToken()
-        .then((token) => {
-            osuApi.getUserApi(token, userId)
-                .then ((_res) => {
-                    let data = _res.data;
-                    let user = osuApi.parseUserJson(data);
-                    axios.post("http://localhost:3001/api/v1/usuario", {
-                       id : parseInt(user.id),
-                       username : (user.username).toString(),
-                       pp : parseInt(user.pp),
-                       global_rank : parseInt(user.global_rank),
-                       country_rank : parseInt(user.country_rank),
-                       badges : user.badges,
-                       playcount : parseInt(user.playcount),
-                       play_time : parseInt(user.play_time),
-                       avatar_url : (user.avatar_url).toString(),
-                       country : (user.country).toString(),
-                    })
+                    osuApi.postUser(data)
                         .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));
@@ -92,7 +48,7 @@ app.get('/admin/usuario/:id', (req, res) => {
 /*
     Insert new user from API data
  */
-app.post("/api/v1/usuario", async (req, res) => {
+app.post('/api/v1/usuario', async (req, res) => {
     try {
         const body = req.body;
         const newUser = await pool.query(
@@ -117,15 +73,94 @@ app.post("/api/v1/usuario", async (req, res) => {
 })
 
 /*
+    Update user and user_badge
+ */
+app.put('/api/v1/usuario/:id', async (req, res) => {
+   try {
+      const userId = req.params.id;
+      const body = req.body;
+
+      const updateUser = await pool.query(
+            `UPDATE usuario SET username = '${body.username}', pp = ${body.pp}, global_rank = ${body.global_rank}, country_rank = ${body.country_rank}, playcount = ${body.playcount}, play_time = ${body.play_time}, avatar_url = '${body.avatar_url}', updated_at = current_timestamp, country ='${body.country}' WHERE id = ${userId}`
+      );
+      if (body.badges.length !== 0){
+           for (let i=0; i< body.badges.length; i++){
+              try {
+                 await pool.query(
+                  `UPDATE usuario_badge SET descripcion = '${body.badges[i].description}', image_url = '${body.badges[i].image_url}' WHERE id = ${body.id}`
+              );
+              } catch (err) {
+                 console.error(err.message);
+              }
+           }
+        }
+      res.status(200).json(updateUser.rows[0]);
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Algo salio mal :(');
+   }
+})
+
+/*
     Insert new torneo
  */
-app.post("/api/v1/torneo", async (req, res) => {
+app.post('/api/v1/torneo', async (req, res) => {
     try {
         const body = req.body;
         const newTorneo = await pool.query(
             `INSERT INTO torneo(name, rank_range, badged, prizepool, bws, url, spreadsheet_url, cierre_regs, formato, cover_url, descripcion) VALUES ('${body.name}', '${body.rank_range}', ${body.badged}, '${body.prizepool}', ${body.bws}, '${body.url}', '${body.spreadsheet_url}', '${body.cierre_regs}', '${body.formato}', '${body.cover_url}', '${body.descripcion}')`
         )
         res.status(200).json(newTorneo.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Algo salio mal :(');
+    }
+})
+
+/*
+    Update torneo
+ */
+app.put('/api/v1/torneo/:id', async (req, res) => {
+    try {
+        const body = req.body;
+        const torneoId = req.params.id;
+        const updateTorneo = await pool.query(
+            `UPDATE torneo SET name ='${body.name}', rank_range = '${body.rank_range}', badged = ${body.badged}, prizepool = '${body.prizepool}', bws = ${body.bws}, url = '${body.url}', spreadsheet_url = '${body.spreadsheet_url}', cierre_regs = '${body.cierre_regs}', formato = '${body.formato}', cover_url = '${body.cover_url}', descripcion = '${body.descripcion}' WHERE id = ${torneoId}`
+        )
+        res.status(200).json(updateTorneo.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Algo salio mal :(');
+    }
+})
+
+/*
+    Insert new periferico
+ */
+app.post('/api/v1/periferico', async (req, res) => {
+    try {
+        const body = req.body;
+        const newPeriferico = await pool.query(
+            `INSERT INTO periferico(marca, modelo, tipo) VALUES ('${body.marca}', '${body.modelo}', '${body.tipo}')`
+        )
+        res.status(200).json(newPeriferico.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Algo salio mal :(');
+    }
+})
+
+/*
+    Update periferico
+ */
+app.put('/api/v1/periferico/:id', async (req, res) => {
+    try {
+        const body = req.body;
+        const perifericoId = req.params.id;
+        const updateTorneo = await pool.query(
+            `UPDATE periferico SET marca ='${body.marca}', modelo = '${body.modelo}', tipo = '${body.tipo}' WHERE id = ${perifericoId}`
+        )
+        res.status(200).json(updateTorneo.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Algo salio mal :(');
