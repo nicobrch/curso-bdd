@@ -69,10 +69,8 @@ create table if not exists usuario_red(
 create table if not exists usuario_badge(
     id serial,
     user_id int not null,
-    awarded_at timestamp not null,
     descripcion varchar not null,
     image_url varchar not null,
-    url varchar not null,
     primary key (id),
     constraint fk_user foreign key (user_id) references usuario(id)
 );
