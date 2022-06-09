@@ -106,7 +106,7 @@ app.put('/api/v1/usuario/:id', async (req, res) => {
 app.get('/api/v1/usuario', async (req, res) => {
    try {
       const allUsers = await pool.query(
-            `SELECT * from usuario ORDER BY global_rank`
+            `SELECT * from usuario`
       );
       res.status(200).json(allUsers.rows);
    } catch (err) {
