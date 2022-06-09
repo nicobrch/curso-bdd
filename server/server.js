@@ -241,7 +241,7 @@ app.put('/api/v1/periferico/:id', async (req, res) => {
 app.get('/api/v1/periferico', async (req, res) => {
    try {
       const allPerifericos = await pool.query(
-            `SELECT * from periferico`
+            `SELECT * from periferico ORDER BY marca`
       );
       res.status(200).json(allPerifericos.rows);
    } catch (err) {
