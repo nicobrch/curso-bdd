@@ -16,8 +16,70 @@ create table if not exists periferico(
     id serial,
     marca varchar not null,
     modelo varchar not null,
-    tipo varchar(32) not null,
+    url varchar,
+    tipo_id int not null,
+    PRIMARY KEY (id),
+    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id)
+);
+create table if not exists tipo_periferico(
+    id serial,
+    tipo varchar(64) not null,
     PRIMARY KEY (id)
+);
+create table if not exists config_mouse(
+    id serial,
+    tipo_id int not null,
+    user_id int not null,
+    dpi int,
+    win_sens float,
+    game_sens float,
+    polling_rate int,
+    PRIMARY KEY (id),
+    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id),
+    constraint fk_user foreign key (user_id) references usuario(id)
+);
+create table if not exists config_teclado(
+    id serial,
+    tipo_id int not null,
+    user_id int not null,
+    switch varchar,
+    keycap varchar,
+    polling_rate int,
+    PRIMARY KEY (id),
+    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id),
+    constraint fk_user foreign key (user_id) references usuario(id)
+);
+create table if not exists config_pantalla(
+    id serial,
+    tipo_id int not null,
+    user_id int not null,
+    herzios int,
+    resolucion_juego float,
+    PRIMARY KEY (id),
+    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id),
+    constraint fk_user foreign key (user_id) references usuario(id)
+);
+create table if not exists config_tablet(
+    id serial,
+    tipo_id int not null,
+    user_id int not null,
+    width float,
+    height float,
+    pos_x float,
+    pos_y float,
+    filtros varchar,
+    pengrip varchar,
+    PRIMARY KEY (id),
+    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id),
+    constraint fk_user foreign key (user_id) references usuario(id)
+);
+create table if not exists usuario_periferico(
+    id serial,
+    user_id int not null,
+    periferico_id int not null,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES usuario(id),
+    CONSTRAINT fk_periferico FOREIGN KEY(periferico_id) REFERENCES periferico(id)
 );
 create table if not exists torneo(
     id serial,
@@ -33,15 +95,6 @@ create table if not exists torneo(
     cover_url varchar,
     descripcion varchar,
     PRIMARY KEY (id)
-);
-create table if not exists usuario_periferico(
-    id serial,
-    user_id int not null,
-    periferico_id int not null,
-    configuracion json,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES usuario(id),
-    CONSTRAINT fk_periferico FOREIGN KEY(periferico_id) REFERENCES periferico(id)
 );
 create table if not exists usuario_torneo(
     id serial,
@@ -69,22 +122,16 @@ create table if not exists usuario_red(
 create table if not exists usuario_badge(
     id serial,
     user_id int not null,
+    badge_id int not null,
+    primary key (id),
+    constraint fk_user foreign key (user_id) references usuario(id),
+    constraint fk_badge foreign key (badge_id) references badge(id)
+);
+create table if not exists badge(
+    id serial,
     descripcion varchar not null,
     image_url varchar not null,
-    primary key (id),
-    constraint fk_user foreign key (user_id) references usuario(id)
-);
-create table if not exists usuario_intereses(
-    id serial,
-    user_id int not null,
-    owc bool,
-    open_rank bool,
-    three_digit bool,
-    four_digit bool,
-    five_digit bool,
-    six_digit bool,
-    primary key (id),
-    constraint fk_user foreign key (user_id) references usuario(id)
+    primary key (id)
 );
 create table if not exists api_map(
     id int not null,
