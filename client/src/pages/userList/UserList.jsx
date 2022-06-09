@@ -1,43 +1,52 @@
 import "./userList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { userRows } from "../../dummyData";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+const axios = require('axios').default;
 
 export default function UserList() {
-  const [data, setData] = useState(userRows);
+   const [data, setData] = useState([]);
 
-  const handleDelete = (id) => {
+   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
-  };
-  
+   };
+
+   const getUsers = async () => {
+      try {
+         const response = await axios.get('http://localhost:3001/api/v1/usuario');
+         const jsonData = await response.data;
+         setData(jsonData);
+      } catch (err) {
+         console.error(err.message);
+      }
+   }
+
+   useEffect( () => {
+      getUsers();
+   }, []);
+
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "user",
+      field: "username",
       headerName: "User",
       width: 200,
       renderCell: (params) => {
         return (
           <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
+            <img className="userListImg" src={params.row.avatar_url} alt="" />
             {params.row.username}
           </div>
         );
       },
     },
-    { field: "email", headerName: "Email", width: 200 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
-    {
-      field: "transaction",
-      headerName: "Transaction Volume",
-      width: 160,
-    },
+    { field: "pp", headerName: "PP", width: 120 },
+    { field: "global_rank", headerName: "Rank G.", width: 150 },
+    { field: "country_rank", headerName: "Rank N.", width: 150 },
+    { field: "playcount", headerName: "Playcount", width: 150 },
+    { field: "country", headerName: "Pais", width: 120 },
+    { field: "updated_at", headerName: "Update", width: 130},
     {
       field: "action",
       headerName: "Action",
@@ -46,7 +55,7 @@ export default function UserList() {
         return (
           <>
             <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Edit</button>
+              <button className="userListEdit">Editar</button>
             </Link>
             <DeleteOutline
               className="userListDelete"
@@ -64,7 +73,7 @@ export default function UserList() {
         rows={data}
         disableSelectionOnClick
         columns={columns}
-        pageSize={8}
+        pageSize={16}
         checkboxSelection
       />
     </div>
