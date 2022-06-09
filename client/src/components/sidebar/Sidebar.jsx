@@ -33,24 +33,6 @@ export default function Sidebar() {
             Badges
           </SidebarItem>
         </SidebarMenu>
-        <SidebarMenu title={'Admin'}>
-          <SidebarItem link={'/insert'}>
-            <InsertLink className='sidebarIcon'/>
-            Insertar
-          </SidebarItem>
-          <SidebarItem link={'/select'}>
-            <ManageSearch className='sidebarIcon'/>
-            Seleccionar
-          </SidebarItem>
-          <SidebarItem link={'/update'}>
-            <Update className='sidebarIcon'/>
-            Actualizar
-          </SidebarItem>
-          <SidebarItem link={'/delete'}>
-            <Delete className='sidebarIcon'/>
-            Borrar
-          </SidebarItem>
-        </SidebarMenu>
       </div>
     </div>
   );

@@ -27,6 +27,12 @@
     align-items: center;
 }
 
+.topLeft{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
 .topbarIconContainer {
   position: relative;
   cursor: pointer;
@@ -50,17 +56,17 @@
 }
 
 .topAvatar{
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     cursor: pointer;
 }
 
 .topLogo{
-    width: 25px;
-    height: 25px;
-    padding-top: 0.5rem;
-    padding-right: 1rem;
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    margin-top: 2px;
     border-radius: 75%;
     cursor: pointer;
 }
