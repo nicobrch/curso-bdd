@@ -1,8 +1,7 @@
 .container{
     display: flex;
-    margin-top: 10px;
+    background-color: rgb(20, 20, 30);
 }
-
 
 .link{
     text-decoration: none;
