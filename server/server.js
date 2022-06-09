@@ -57,7 +57,10 @@ app.post('/api/v1/usuario', async (req, res) => {
            for (let i=0; i< body.badges.length; i++){
               try {
                  await pool.query(
-                  `INSERT INTO usuario_badge(user_id, descripcion, image_url) VALUES (${body.id}, '${body.badges[i].description}', '${body.badges[i].image_url}')`
+                  `INSERT INTO badge(descripcion, image_url) VALUES ('${body.badges[i].description}', '${body.badges[i].image_url}')`
+              );
+                 await pool.query(
+                  `INSERT INTO usuario_badge(user_id, badge_id) VALUES (${body.id}, (SELECT id FROM badge WHERE descripcion = '${body.badges[i].description}'))`
               );
               } catch (err) {
                  console.error(err.message);
@@ -82,6 +85,7 @@ app.put('/api/v1/usuario/:id', async (req, res) => {
       const updateUser = await pool.query(
             `UPDATE usuario SET username = '${body.username}', pp = ${body.pp}, global_rank = ${body.global_rank}, country_rank = ${body.country_rank}, playcount = ${body.playcount}, play_time = ${body.play_time}, avatar_url = '${body.avatar_url}', updated_at = current_timestamp, country ='${body.country}' WHERE id = ${userId}`
       );
+      /*
       if (body.badges.length !== 0){
            for (let i=0; i< body.badges.length; i++){
               try {
@@ -93,6 +97,7 @@ app.put('/api/v1/usuario/:id', async (req, res) => {
               }
            }
         }
+       */
       res.status(200).json(updateUser.rows[0]);
    } catch (err) {
       console.error(err.message);
@@ -106,7 +111,7 @@ app.put('/api/v1/usuario/:id', async (req, res) => {
 app.get('/api/v1/usuario', async (req, res) => {
    try {
       const allUsers = await pool.query(
-            `SELECT * from usuario`
+            `SELECT * from usuario ORDER BY global_rank`
       );
       res.status(200).json(allUsers.rows);
    } catch (err) {
@@ -204,7 +209,7 @@ app.post('/api/v1/periferico', async (req, res) => {
     try {
         const body = req.body;
         const newPeriferico = await pool.query(
-            `INSERT INTO periferico(marca, modelo, tipo) VALUES ('${body.marca}', '${body.modelo}', '${body.tipo}')`
+            `INSERT INTO periferico(marca, modelo, url, tipo_id) VALUES ('${body.marca}', '${body.modelo}', '${body.url}', ${body.tipo_id})`
         )
         res.status(200).json(newPeriferico.rows[0]);
     } catch (err) {
@@ -221,7 +226,7 @@ app.put('/api/v1/periferico/:id', async (req, res) => {
         const body = req.body;
         const perifericoId = req.params.id;
         const updateTorneo = await pool.query(
-            `UPDATE periferico SET marca ='${body.marca}', modelo = '${body.modelo}', tipo = '${body.tipo}' WHERE id = ${perifericoId}`
+            `UPDATE periferico SET marca ='${body.marca}', modelo = '${body.modelo}', url = ${body.url}, tipo_id = ${body.tipo_id} WHERE id = ${perifericoId}`
         )
         res.status(200).json(updateTorneo.rows[0]);
     } catch (err) {
