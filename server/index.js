@@ -57,7 +57,7 @@ app.get("/api/v1/usuario/:id", async (req, res) => {
     }
 })
 
-// Insertar Usuario
+// Insertar Periferico
 app.post("/api/v1/usuario", async (req, res) => {
     try {
         const body = req.body;
@@ -120,7 +120,7 @@ app.post("/api/v1/usuario", async (req, res) => {
     }
 })
 
-// Actualizar Usuario
+// Actualizar Periferico
 app.put("/api/v1/usuario/:id", async (req, res) => {
     try {
         const {id} = req.params;
@@ -218,13 +218,13 @@ app.post("/admin/usuario", async (req, res) => {
         }).catch(err => console.error(err.message));
 })
 
-//Perifericos
+//Periferico
 
 // Obtener todos los perifericos
 app.get("/api/v1/periferico", async (req, res) => {
     try {
         const periferico = await pool.query(
-            `SELECT * FROM periferico`
+            `SELECT * FROM periferico p JOIN tipo_periferico tp on p.tipo_id = tp.id`
         );
         res.status(200).json(periferico.rows);
     } catch (err) {

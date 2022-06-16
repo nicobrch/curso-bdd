@@ -84,7 +84,7 @@ export const fetchPeriferico = (id) => {
 };
 
 export const fetchPerifericos = () => {
-    console.log('Fetching Perifericos...');
+    console.log('Fetching Periferico...');
     return axios
         .get(apiUrl + '/periferico')
         .then(res => res.data)

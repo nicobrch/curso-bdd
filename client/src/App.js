@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import UserList from "./pages/Usuarios/UserList";
 import Usuario from "./pages/Usuarios/Usuario";
 import UsuarioInsert from "./pages/Usuarios/UsuarioInsert";
+import PerifericoList from "./pages/Perifericos/PerifericoList";
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
                     <Route path="/usuarios" element={<UserList/>}/>
                     <Route path="/usuarios/:id" element={<Usuario/>}/>
                     <Route path="/admin/usuario" element={<UsuarioInsert/>}/>
+                    <Route path="/perifericos" element={<PerifericoList/>}/>
                 </Routes>
             </div>
         </Router>

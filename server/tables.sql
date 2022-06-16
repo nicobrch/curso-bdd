@@ -58,6 +58,7 @@ create table if not exists periferico(
     marca varchar not null,
     modelo varchar not null,
     url varchar,
+    image_url varchar,
     tipo_id int not null,
     PRIMARY KEY (id),
     constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id)
