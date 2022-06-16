@@ -1,47 +1,30 @@
-import Sidebar from "./components/sidebar/Sidebar";
-import Topbar from "./components/topbar/Topbar";
-import "./App.css";
-import Home from "./pages/home/Home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import UserList from "./pages/userList/UserList";
-import User from "./pages/user/User";
-import NewUser from "./pages/newUser/NewUser";
-import PerifericosList from "./pages/perifericoList/PerifericosList";
-import Product from "./pages/product/Product";
-import NewProduct from "./pages/newProduct/NewProduct";
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Topbar from "./components/Topbar/Topbar";
+import Home from "./pages/Home/Home";
+import UserList from "./pages/Usuarios/UserList";
+import Usuario from "./pages/Usuarios/Usuario";
+import UsuarioInsert from "./pages/Usuarios/UsuarioInsert";
 
-function App() {
-  return (
-    <Router>
-      <Topbar />
-      <div className="container">
-        <Sidebar />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/users">
-            <UserList />
-          </Route>
-          <Route path="/user/:userId">
-            <User />
-          </Route>
-          <Route path="/newUser">
-            <NewUser />
-          </Route>
-          <Route path="/perifericos">
-            <PerifericosList/>
-          </Route>
-          <Route path="/perifericos/:perifericoId">
-            <Product />
-          </Route>
-          <Route path="/newPeriferico">
-            <NewProduct />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
-  );
+const App = () => {
+
+    return (
+        <Router>
+            <Topbar/>
+            <div className="contenedor">
+                <Sidebar/>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/usuarios" element={<UserList/>}/>
+                    <Route path="/usuarios/:id" element={<Usuario/>}/>
+                    <Route path="/admin/usuario" element={<UsuarioInsert/>}/>
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
