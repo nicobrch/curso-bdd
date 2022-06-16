@@ -20,7 +20,7 @@ class TableHeader extends Component {
             <div className="container rounded">
                 <Row>
                     <Col>
-                        <img src={this.state.foto} alt={""} className={"usuarioAvatar"}/>
+                        <img src={this.state.foto} alt={""} className={"foto"}/>
                         <span className="titulo">{this.state.titulo}</span>
                     </Col>
                     <Col align="right">

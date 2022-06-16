@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./Usuario.css";
-import {Row, Col, Form} from "react-bootstrap";
+import {Row, Col, Form, FormGroup} from "react-bootstrap";
 import {postUser} from "../../Api";
 
 const UsuarioInsert = () => {
@@ -10,22 +10,17 @@ const UsuarioInsert = () => {
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
-            const body = { userId };
-            const response = await fetch("http://localhost:5000/todos", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            });
-
-            window.location = "/";
+            await postUser(userId);
+            alert('Usuario insertado!');
         } catch (err) {
+            alert('Error!')
             console.error(err.message);
         }
     };
 
     return (
         <div className="usuario">
-            <div className="container rounded">
+            <div className="container rounded col-4 align-self-center">
                 <Row>
                     <Col>
                         <h1 className="titulo">Insertar nuevo Usuario</h1>
@@ -34,23 +29,21 @@ const UsuarioInsert = () => {
                 <Row>
                     <Col>
                         <Form onSubmit={onSubmitForm}>
-                            <Form.Control
-                                type="text"
-                                placeholder="osu! id"
-                                value={userId}
-                                onChange={e => setUserId(e.target.value)}
-                            />
-                            <Form.Text className="texto">
-                                Solo la ID sin url
-                            </Form.Text>
+                            <FormGroup>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="osu! id"
+                                    value={userId}
+                                    onChange={e => setUserId(e.target.value)}
+                                />
+                                <Form.Text className="texto">
+                                    Solo la ID sin url
+                                </Form.Text>
+                            </FormGroup>
+                            <button className="botonInsertar" type="submit">
+                                Insertar
+                            </button>
                         </Form>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <button className="botonInsertar">
-                            Insertar
-                        </button>
                     </Col>
                 </Row>
             </div>

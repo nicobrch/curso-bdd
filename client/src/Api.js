@@ -10,10 +10,10 @@ export const fetchUser = (id) => {
         .catch(err => console.error(err.message));
 };
 
-export const postUser = (body) => {
+export const postUser = (userId) => {
     console.log('Inserting User...');
     return axios
-        .post(adminUrl + '/usuario', {body: body, headers: { Accept : 'application/json'}})
+        .post(adminUrl + '/usuario', {id: userId, headers: { Accept : 'application/json'}})
         .then(res => res.data)
         .catch(err => console.error(err.message));
 };
