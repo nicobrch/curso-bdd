@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./Usuario.css";
 import {fetchUsers} from "../../Api";
-import { DeleteOutline } from "@mui/icons-material"
 import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
 
@@ -14,20 +13,20 @@ const UserList = () => {
 
     if (datos === null){
         return (
-            <div className="lista">
+            <div className="usuario">
                 <div className="container rounded">
-                    <h1 className="titulo">Cargando...</h1>
+                    <h1 className="tituloLista">Cargando...</h1>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="lista">
+        <div className="usuario">
             <div className="container rounded">
                 <Row>
                     <Col>
-                        <h1 className="titulo">Usuarios</h1>
+                        <h1 className="tituloLista">Usuarios</h1>
                     </Col>
                     <Col align="right">
                         <Link to="../admin/usuario">
@@ -35,58 +34,43 @@ const UserList = () => {
                         </Link>
                     </Col>
                 </Row>
+                <hr></hr>
                 <Row>
-                    <table className="table table-responsive">
-                        <thead>
-                        <tr>
-                            <th className="titulo" style={{width: '1%'}}>Id</th>
-                            <th className="titulo" style={{width: '1%'}}>Avatar</th>
-                            <th className="titulo" style={{width: '8%'}}>Username</th>
-                            <th className="titulo" style={{width: '1%'}}>PP</th>
-                            <th className="titulo" style={{width: '2%'}}>Global Rank</th>
-                            <th className="titulo" style={{width: '2%'}}>Country Rank</th>
-                            <th className="titulo" style={{width: '2%'}}>Playcount</th>
-                            <th className="titulo" style={{width: '2%'}}>Playtime</th>
-                            <th className="titulo" style={{width: '2%'}}>Region</th>
-                            <th className="titulo" style={{width: '2%'}}>Pais</th>
-                            <th className="titulo" style={{width: '12%'}}>Creado</th>
-                            <th className="titulo" style={{width: '12%'}}>Actualizado</th>
-                            <th className="titulo" style={{width: '1%'}}>Editar</th>
-                            <th className="titulo" style={{width: '1%'}}>Borrar</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {datos.map(data => (
-                            <tr key={data.id}>
-                                <td className="texto">{data.id}</td>
-                                <td>
-                                    <img src={data.avatar_url} alt="avatar" className="avatar"/>
-                                </td>
-                                <td className="texto">{data.username}</td>
-                                <td className="texto">{data.pp}</td>
-                                <td className="texto">{data.global_rank}</td>
-                                <td className="texto">{data.country_rank}</td>
-                                <td className="texto">{data.playcount}</td>
-                                <td className="texto">{data.play_time}</td>
-                                <td className="texto">{data.region}</td>
-                                <td className="texto">{data.country}</td>
-                                <td className="texto">{data.created_at}</td>
-                                <td className="texto">{data.updated_at}</td>
-                                <td>
-                                    <Link to={`${data.id}`}>
-                                        <button className="botonEditar">Editar</button>
-                                    </Link>
-                                </td>
-                                <td>
-                                    <Link to={`${data.id}?state=edit`}>
-                                        <DeleteOutline className="botonBorrar"/>
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                    <Col xs={1} className="text-center"><span className="tituloTabla">ID</span></Col>
+                    <Col xs={3} className="text-center"><span className="tituloTabla">Usuario</span></Col>
+                    <Col xs={1} className="text-center"><span className="tituloTabla">Nacional</span></Col>
+                    <Col xs={1} className="text-center"><span className="tituloTabla">Global</span></Col>
+                    <Col xs={1} className="text-center"><span className="tituloTabla">PP</span></Col>
+                    <Col xs={1} className="text-center"><span className="tituloTabla">Pais</span></Col>
+                    <Col xs={2} className="text-center"><span className="tituloTabla">Creado</span></Col>
+                    <Col xs={2} className="text-center"><span className="tituloTabla">Accion</span></Col>
                 </Row>
+                {datos.map(data => (
+                    <div className="lista" key={data.id}>
+                        <Row>
+                            <Col xs={1} className="text-center"><span className="textoTabla">{data.id}</span></Col>
+                            <Col xs={1} className="text-center">
+                                <img src={data.avatar_url} alt="avatar" className="avatar"/>
+                            </Col>
+                            <Col xs={2} className="text-center"><span className="tituloTabla">{data.username}</span></Col>
+                            <Col xs={1} className="text-center"><span className="textoTabla">{data.country_rank}</span></Col>
+                            <Col xs={1} className="text-center"><span className="textoTabla">{data.global_rank}</span></Col>
+                            <Col xs={1} className="text-center"><span className="textoTabla">{data.pp}</span></Col>
+                            <Col xs={1} className="text-center"><span className="textoTabla">{data.country}</span></Col>
+                            <Col xs={2} className="text-center"><span className="textoTabla">{data.created_at}</span></Col>
+                            <Col xs={1} className="text-center">
+                                <Link to={`${data.id}`}>
+                                    <button className="botonEditar">Editar</button>
+                                </Link>
+                            </Col>
+                            <Col xs={1} className="text-center">
+                                <Link to={`${data.id}`}>
+                                    <button className="botonBorrar">Borrar</button>
+                                </Link>
+                            </Col>
+                        </Row>
+                    </div>
+                ))}
             </div>
         </div>
     );

@@ -24,7 +24,7 @@ const UsuarioInsert = () => {
     };
 
     return (
-        <div className="lista">
+        <div className="usuario">
             <div className="container rounded">
                 <Row>
                     <Col>

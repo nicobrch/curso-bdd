@@ -1,0 +1,49 @@
+.container{
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #191D2A;
+    box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.5);
+}
+
+.update{
+    color: #DADFED;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: top;
+    padding-right: 10px;
+}
+
+.boton{
+    border: none;
+    border-radius: 5px;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.Borrar{
+    background-color: #DA4040;
+    color: #EFF1F2;
+}
+
+.Actualizar{
+    background-color: #CDB23B;
+    color: #EFF1F2;
+}
+
+.titulo{
+    color: #DADFED;
+    font-size: 42px;
+    font-weight: bold;
+    vertical-align: top;
+    padding-left: 10px;
+}
+
+.foto{
+    height: 128px;
+    width: 128px;
+    border-radius: 15%;
+    object-fit: cover;
+}

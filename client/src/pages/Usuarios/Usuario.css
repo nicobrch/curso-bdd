@@ -1,5 +1,12 @@
-.lista{
+.usuario{
     flex: 4;
+    background-color: #2A2E3C;
+}
+
+.lista{
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 10px;
     background-color: #2A2E3C;
 }
 
@@ -10,63 +17,40 @@
     box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.5);
 }
 
-.titulo{
-    color: #DADFED;
-}
-
-.usuarioTitulo{
-    color: #DADFED;
-    font-size: 42px;
-    font-weight: bold;
-    vertical-align: top;
-    padding-left: 10px;
-}
-
-.usuarioAvatar{
-    height: 128px;
-    width: 128px;
-    border-radius: 15%;
-    object-fit: cover;
-}
-
-.usuarioUpdate{
-    color: #DADFED;
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: top;
-    padding-right: 10px;
-}
-
-.usuarioBotonBorrar{
-    border: none;
-    border-radius: 5px;
-    padding: 5px 8px;
-    background-color: #DA4040;
-    color: white;
-    cursor: pointer;
-    font-size: 18px;
-    margin-top: 40px;
-}
-
 .texto{
     color: #B4B8C6;
 }
 
-.avatar{
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+.tituloLista{
+    color: #DADFED;
+    font-size: 42px;
+    font-weight: bold;
+    padding-left: 10px;
 }
 
-.userLink{
-    text-decoration: none;
+.textoTabla{
+    color: #D1D4DE;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tituloTabla{
+    color: #DADFED;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.avatar{
+    height: 60px;
+    width: 60px;
+    border-radius: 25%;
+    object-fit: cover;
 }
 
 .botonEditar{
     border: none;
     border-radius: 5px;
-    padding: 3px 7px;
+    padding: 4px 8px;
     background-color: #3bb077;
     color: white;
     cursor: pointer;
@@ -87,9 +71,12 @@
 }
 
 .botonBorrar{
-    height: 35px;
-    width: 35px;
-    color: #DA4040;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 8px;
+    background-color: #DA4040;
+    color: white;
     cursor: pointer;
-    margin-top: 2px;
+    margin-right: 5px;
+    margin-top: 5px;
 }
