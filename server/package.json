@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/nicobrch/la-base/"
   },
-  "homepage": "https://github.com/nicobrch/la-base#readme",
+  "homepage": "https://github.com/nico brch/la-base#readme",
   "dependencies": {
     "axios": "^0.27.2",
     "cors": "^2.8.5",
