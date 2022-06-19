@@ -1,11 +1,12 @@
 import React, {Component} from "react";
+import styles from "./Sidebar.module.css";
 
 class SidebarMenu extends Component {
     render() {
         return (
-            <div className="sidebarMenu">
-                <h3 className="sidebarTitle">{this.props.title}</h3>
-                <ul className="sidebarList">
+            <div className={styles.menu}>
+                <h3 className={styles.titulo}>{this.props.title}</h3>
+                <ul className={styles.list}>
                     {this.props.children}
                 </ul>
             </div>

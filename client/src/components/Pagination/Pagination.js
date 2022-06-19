@@ -1,6 +1,5 @@
 import React from 'react';
-import {Row, Col} from "react-bootstrap";
-import "./Pagination.css"
+import styles from "./Pagination.module.css"
 
 const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
   const pageNumbers = [];
@@ -12,7 +11,7 @@ const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
   return (
     <ul className="justify-content-end">
     {pageNumbers.map(number => (
-            <button key={number} onClick={() => paginate(number)} className="botonPagination">
+            <button key={number} onClick={() => paginate(number)} className={styles.boton}>
               {number}
             </button>
     ))}

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import "./Usuario.css";
-import {Row, Col, Form, FormGroup} from "react-bootstrap";
+import styles from "./Usuario.module.css";
+import {Container, Row, Col, Form, FormGroup} from "react-bootstrap";
 import {postUser} from "../../Api";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -43,37 +43,37 @@ const UsuarioInsert = () => {
     };
 
     return (
-        <div className="usuario">
+        <div className={styles.fondo}>
             <Toaster
                 position="top-right"
                 reverseOrder={false}
             />
-            <div className="container rounded col-4 align-self-center">
-                <Row>
-                    <Col>
-                        <h1 className="titulo">Insertar nuevo Usuario</h1>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Form onSubmit={onSubmitForm}>
-                            <FormGroup>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="osu! id"
-                                    value={userId}
-                                    onChange={e => setUserId(e.target.value)}
-                                />
-                                <Form.Text className="texto">
-                                    Solo la ID sin url
-                                </Form.Text>
-                            </FormGroup>
-                            <button className="botonInsertar" type="submit">
-                                Insertar
-                            </button>
-                        </Form>
-                    </Col>
-                </Row>
+            <div className={`${styles.container} container align-self-center col-4 rounded`}>
+            <Row>
+                <Col>
+                    <h1 className={styles.titulo}>Insertar nuevo Usuario</h1>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Form onSubmit={onSubmitForm}>
+                        <FormGroup>
+                            <Form.Control
+                                type="text"
+                                placeholder="osu! id"
+                                value={userId}
+                                onChange={e => setUserId(e.target.value)}
+                            />
+                            <Form.Text className={styles.texto}>
+                                Solo la ID sin url
+                            </Form.Text>
+                        </FormGroup>
+                        <button className={styles.insertar} type="submit">
+                            Insertar
+                        </button>
+                    </Form>
+                </Col>
+            </Row>
             </div>
         </div>
     );

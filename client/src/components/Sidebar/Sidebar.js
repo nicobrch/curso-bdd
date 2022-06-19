@@ -1,5 +1,5 @@
 import {Component} from "react";
-import "./sidebar.css";
+import styles from "./Sidebar.module.css";
 import {
   Dashboard, Person, Keyboard, EmojiEvents, WorkspacePremium
 } from "@mui/icons-material";
@@ -9,29 +9,29 @@ import SidebarMenu from "./SidebarMenu";
 class Sidebar extends Component {
     render () {
         return (
-            <div className="sidebar">
-                <div className="sidebarWrapper">
+            <div className={styles.container}>
+                <div className={styles.wrapper}>
                     <SidebarMenu title={'Dashboard'}>
                         <SidebarItem link={'/'}>
-                            <Dashboard className='sidebarIcon'/>
+                            <Dashboard className={styles.icon}/>
                             Home
                         </SidebarItem>
                     </SidebarMenu>
                     <SidebarMenu title={'Tablas'}>
                         <SidebarItem link={'usuarios'}>
-                            <Person className='sidebarIcon'/>
+                            <Person className={styles.icon}/>
                             Usuarios
                         </SidebarItem>
                         <SidebarItem link={'/perifericos'}>
-                            <Keyboard className='sidebarIcon'/>
+                            <Keyboard className={styles.icon}/>
                             Perifericos
                         </SidebarItem>
                         <SidebarItem link={'/torneos'}>
-                            <EmojiEvents className='sidebarIcon'/>
+                            <EmojiEvents className={styles.icon}/>
                             Torneos
                         </SidebarItem>
                         <SidebarItem link={'/badges'}>
-                            <WorkspacePremium className='sidebarIcon'/>
+                            <WorkspacePremium className={styles.icon}/>
                             Badges
                         </SidebarItem>
                     </SidebarMenu>

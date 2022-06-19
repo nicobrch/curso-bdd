@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import "./Usuario.css";
+import styles from "./Usuario.module.css";
 import {fetchUsers} from "../../Api";
 import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
@@ -17,9 +17,9 @@ const UserList = () => {
 
     if (datos === null){
         return (
-            <div className="usuario">
+            <div className={styles.fondo}>
                 <div className="container rounded">
-                    <h1 className="tituloLista">Cargando...</h1>
+                    <h1 className={styles.titulo}>Cargando...</h1>
                 </div>
             </div>
         )
@@ -31,28 +31,28 @@ const UserList = () => {
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     return (
-        <div className="usuario">
-            <div className="container rounded">
+        <div className={styles.fondo}>
+            <div className={`${styles.container} container rounded`}>
                 <Row>
                     <Col>
-                        <h1 className="tituloLista">Usuarios</h1>
+                        <h1 className={styles.titulo}>Usuarios</h1>
                     </Col>
                     <Col align="right">
                         <Link to="../admin/usuario">
-                            <button className="botonInsertar">Insertar Nuevo Usuario</button>
+                            <button className={styles.insertar}>Insertar Nuevo Usuario</button>
                         </Link>
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">ID</span></Col>
-                    <Col xs={3} className="text-center"><span className="tituloTabla">Usuario</span></Col>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">Nacional</span></Col>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">Global</span></Col>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">PP</span></Col>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">Playcount</span></Col>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">Pais</span></Col>
-                    <Col xs={1} className="text-center"><span className="tituloTabla">Region</span></Col>
-                    <Col xs={2} className="text-center"><span className="tituloTabla">Accion</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>ID</span></Col>
+                    <Col xs={3} className="text-center"><span className={styles.tituloTabla}>Usuario</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Nacional</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Global</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>PP</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Playcount</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Pais</span></Col>
+                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Region</span></Col>
+                    <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Accion</span></Col>
                 </Row>
                     <Usuarios datos={currentItems}/>
                 <Row>
