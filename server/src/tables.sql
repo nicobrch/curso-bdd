@@ -13,21 +13,6 @@ create table if not exists usuario(
     updated_at timestamp not null DEFAULT current_timestamp,
     PRIMARY KEY (id)
 );
-create table if not exists torneo(
-    id serial,
-    nombre varchar not null,
-    rank_range varchar,
-    badged varchar,
-    prizepool varchar,
-    bws varchar,
-    url varchar,
-    spreadsheet_url varchar,
-    cierre_regs varchar,
-    formato varchar,
-    cover_url varchar,
-    descripcion varchar,
-    PRIMARY KEY (id)
-);
 create table if not exists red_social(
     id serial,
     nombre varchar not null,
@@ -43,6 +28,22 @@ create table if not exists badge(
     descripcion varchar not null,
     image_url varchar not null,
     primary key (id)
+);
+create table if not exists torneo(
+    id serial,
+    nombre varchar not null,
+    rank_range varchar,
+    badge_id int,
+    prizepool varchar,
+    bws varchar,
+    url varchar,
+    spreadsheet_url varchar,
+    cierre_regs varchar,
+    formato varchar,
+    cover_url varchar,
+    descripcion varchar,
+    PRIMARY KEY (id),
+    constraint fk_badge foreign key (badge_id) references badge(id)
 );
 create table if not exists api_map(
     id int not null,
