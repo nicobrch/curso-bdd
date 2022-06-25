@@ -18,7 +18,7 @@ const getMeToken = async (code) => {
             "Content-Type": "application/json"
         }
     };
-    return await axios.post(tokenUrl, body, params).then((_res) => _res.data.access_token);
+    return await axios.post(tokenUrl, body, params).then((_res) => _res.data['access_token']);
 }
 
 const getUserMe = async (token) => {
@@ -47,7 +47,7 @@ const getToken = async () => {
         }
     };
 
-    return await axios.post(tokenUrl, body, params).then((_res) => _res.data.access_token);
+    return await axios.post(tokenUrl, body, params).then((_res) => _res.data['access_token']);
 }
 
 const getUserData = async (token, id) => {
@@ -60,19 +60,19 @@ const getUserData = async (token, id) => {
     return await axios.get(userUrl, {headers: headers});
 }
 
-const parseUserJson = (userData) => {
-    return {
-        id: userData['id'],
-        username: userData['username'],
-        pp: userData['statistics']['pp'],
-        global_rank: userData['statistics']['global_rank'],
-        country_rank: userData['statistics']['country_rank'],
-        badges: userData['badges'],
-        playcount: userData['statistics']['play_count'],
-        play_time: userData['statistics']['play_time'],
-        avatar_url: userData['avatar_url'],
-        country: userData['country']['name'],
+const getUserScoresBest = async (token, id) => {
+    const scoreUrl = `${apiUrl}/users/${id}/scores/best`;
+    const headers = {
+        "Content-Type": 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token
+    };
+    const params = {
+        mode: 'osu',
+        limit: '10',
+        headers: headers,
     }
+    return await axios.get(scoreUrl, params);
 }
 
-module.exports = ({getMeToken, getUserMe, getToken, getUserData, parseUserJson});
+module.exports = ({getMeToken, getUserMe, getToken, getUserData, getUserScoresBest});
