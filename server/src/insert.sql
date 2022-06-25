@@ -39,23 +39,23 @@ insert into usuario_periferico(user_id, periferico_id, config) values ((select i
 
 insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Intercambing'), (select id from periferico where marca = 'XP-PEN' and modelo = 'G640S'), '{"area": "https://i.gyazo.com/1eddc1245c1dcdaca654e2541ac77f1f.png"}');
 insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Intercambing'), (select id from periferico where marca = 'Asus' and modelo = 'TUF VG279QM'), '{"resolucion": "1920x1080", "herzios": "280"}');
-insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Intercambing'), (select id from periferico where marca = 'Hyperx' and modelo = 'Alloy Origins Core'), '{"switch": "Hyperx Red"}');
+insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Intercambing'), (select id from periferico where marca = 'HyperX' and modelo = 'Alloy Origins Core'), '{"switch": "Hyperx Red"}');
 
 insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Pancho'), (select id from periferico where marca = 'Wacom' and modelo = 'CTL-490'), '{"area": "https://i.gyazo.com/1eddc1245c1dcdaca654e2541ac77f1f.png"}');
 insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Pancho'), (select id from periferico where marca = 'LG' and modelo = '24MK430H-B'), '{"resolucion": "1920x1080", "herzios": "75"}');
 insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Pancho'), (select id from periferico where marca = 'GMMK' and modelo = 'TKL'), '{"switch": "Kailh Pro Light Green"}');
 
-insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Unable'), (select id from periferico where marca = 'Logitech' and modelo = 'G102'), '{"dpi": "800", "polling": "1000"}');
-insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Unable'), (select id from periferico where marca = 'HP' and modelo = 'X24ih'), '{"resolucion": "1920x1080", "herzios": "144"}');
-insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'Unable'), (select id from periferico where marca = 'Hyperx' and modelo = 'Alloy Elite'), '{"switch": "Cherry Red"}');
+insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'uNable'), (select id from periferico where marca = 'Logitech' and modelo = 'G102'), '{"dpi": "800", "polling": "1000"}');
+insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'uNable'), (select id from periferico where marca = 'HP' and modelo = 'X24ih'), '{"resolucion": "1920x1080", "herzios": "144"}');
+insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'uNable'), (select id from periferico where marca = 'HyperX' and modelo = 'Alloy Elite'), '{"switch": "Cherry Red"}');
 
-insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'mocaccino'), (select id from periferico where marca = 'Wacom' and modelo = 'CTL-472'), '{"area": "https://i.gyazo.com/1eddc1245c1dcdaca654e2541ac77f1f.png"}');
+insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'mocaccino'), (select id from periferico where marca = 'Wacom' and modelo = 'CTL-472'), '{"area": "https://puu.sh/IJdAT/d54e9d08a1.png"}');
 insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'mocaccino'), (select id from periferico where marca = 'Asus' and modelo = 'TUF VG24VQ'), '{"resolucion": "1920x1080", "herzios": "144"}');
-insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'mocaccino'), (select id from periferico where marca = 'Hyperx' and modelo = 'Alloy Origins Core'), '{"switch": "Hyperx Red"}');
+insert into usuario_periferico(user_id, periferico_id, config) values ((select id from usuario where username = 'mocaccino'), (select id from periferico where marca = 'HyperX' and modelo = 'Alloy Origins Core'), '{"switch": "Hyperx Red"}');
 
 /* usuario red */
 insert into usuario_red(user_id, red_id, valor) values ((select id from usuario where username = 'Mathi'), (select id from red_social where nombre = 'Twitch'), 'https://www.twitch.tv/mathi');
 insert into usuario_red(user_id, red_id, valor) values ((select id from usuario where username = 'Intercambing'), (select id from red_social where nombre = 'Twitch'), 'https://www.twitch.tv/intercambing_');
 insert into usuario_red(user_id, red_id, valor) values ((select id from usuario where username = 'Pancho'), (select id from red_social where nombre = 'Twitch'), 'https://www.twitch.tv/notpanchowo');
-insert into usuario_red(user_id, red_id, valor) values ((select id from usuario where username = 'Unable'), (select id from red_social where nombre = 'Twitch'), 'https://www.twitch.tv/unablesan');
+insert into usuario_red(user_id, red_id, valor) values ((select id from usuario where username = 'uNable'), (select id from red_social where nombre = 'Twitch'), 'https://www.twitch.tv/unablesan');
 insert into usuario_red(user_id, red_id, valor) values ((select id from usuario where username = 'mocaccino'), (select id from red_social where nombre = 'Twitch'), 'https://www.twitch.tv/mocaccino0');
