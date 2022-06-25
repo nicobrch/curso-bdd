@@ -15,12 +15,12 @@ create table if not exists usuario(
 );
 create table if not exists torneo(
     id serial,
-    name varchar not null,
-    rank_range varchar not null,
-    badged varchar not null,
+    nombre varchar not null,
+    rank_range varchar,
+    badged varchar,
     prizepool varchar,
-    bws varchar not null,
-    url varchar not null,
+    bws varchar,
+    url varchar,
     spreadsheet_url varchar,
     cierre_regs varchar,
     formato varchar,
