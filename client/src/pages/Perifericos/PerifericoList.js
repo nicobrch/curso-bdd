@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import styles from "./Usuario.module.css";
+import styles from "./Periferico.module.css";
 import {fetchUsers} from "../../Api";
 import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
-import Usuarios from "./Usuarios";
+import Perifericos from "./Perifericos";
 import Pagination from "../../components/Pagination/Pagination";
 
-const UserList = () => {
+const PerifericoList = () => {
     const [datos, setDatos] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState(10);
@@ -54,7 +54,7 @@ const UserList = () => {
                     <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Region</span></Col>
                     <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Accion</span></Col>
                 </Row>
-                    <Usuarios datos={currentItems}/>
+                    <Perifericos datos={currentItems}/>
                 <Row>
                 <Pagination 
                 itemsPerPage={itemPerPage}
@@ -67,4 +67,4 @@ const UserList = () => {
     );
 }
 
-export default UserList;
+export default PerifericoList;

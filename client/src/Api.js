@@ -5,9 +5,7 @@ const adminUrl = 'http://localhost:5000/admin';
 export const fetchUser = (id) => {
     console.log('Fetching User...');
     return axios
-        .get(apiUrl + '/usuario/' + id)
-        .then(res => res.data)
-        .catch(err => console.error(err.message));
+        .get(apiUrl + '/usuario/' + id);
 };
 
 export const postUser = (userId) => {
@@ -16,6 +14,20 @@ export const postUser = (userId) => {
         .post(adminUrl + '/usuario', {id: userId, headers: { Accept : 'application/json'}})
         .then(res => res.data)
         .catch(err => console.error(err.message));
+};
+
+export const updateUser = (userId, region) => {
+    console.log('Updating User...');
+    return axios
+        .post(adminUrl + '/update/usuario', {id: userId, region: region, headers: { Accept : 'application/json'}})
+        .then(res => res.data)
+        .catch(err => console.error(err.message));
+};
+
+export const deleteUser = (userId) => {
+    console.log('Deleting User...');
+    return axios
+        .delete(adminUrl + '/usuario/' + userId);
 };
 
 export const fetchUsers = () => {
@@ -29,25 +41,19 @@ export const fetchUsers = () => {
 export const fetchUserBadges = (id) => {
     console.log('Fetching User Badges...');
     return axios
-        .get(apiUrl + '/userbadge/' + id)
-        .then(res => res.data)
-        .catch(err => console.error(err.message));
+        .get(apiUrl + '/usuariobadges/' + id)
 };
 
 export const fetchUserTorneos = (id) => {
     console.log('Fetching User Torneos...');
     return axios
-        .get(apiUrl + '/usertorneo/' + id)
-        .then(res => res.data)
-        .catch(err => console.error(err.message));
+        .get(apiUrl + '/usuariotorneos/' + id)
 };
 
 export const fetchUserPerifericos = (id) => {
-    console.log('Fetching User Torneos...');
+    console.log('Fetching User Perifericos...');
     return axios
-        .get(apiUrl + '/userperiferico/' + id)
-        .then(res => res.data)
-        .catch(err => console.error(err.message));
+        .get(apiUrl + '/usuarioperifericos/' + id);
 };
 
 export const fetchUserConfig = (tipo, id) => {

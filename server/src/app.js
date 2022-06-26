@@ -21,7 +21,7 @@ app.get("/oauth-callback", ({query : {code}}, res) => {
         .then((token) => {
             osu.getUserMe(token)
                 .then((_res) => {
-                    let data = osu.parseUserJson(_res.data);
+                    let data = ftr.parseUserJson(_res.data);
                     axios.post("http://localhost:5000/api/v1/usuario", data)
                         .catch(err => console.error(err.message));
                 }).catch(err => console.error(err.message));
@@ -29,7 +29,7 @@ app.get("/oauth-callback", ({query : {code}}, res) => {
         }).catch(err => console.error(err.message));
 })
 
-// Usuarios
+// Perifericos
 
 // Obtener todos los usuarios
 app.get("/api/v1/usuario", async (req, res) => {
@@ -58,18 +58,34 @@ app.get("/api/v1/usuario/:id", async (req, res) => {
     }
 })
 
+// Insertar un usuario mediante la ID
+app.post("/admin/usuario", async (req, res) => {
+    let {id} = req.body;
+    osu.getToken()
+        .then((token) => {
+            osu.getUserData(token, id)
+                .then((_res) => {
+                    let data = ftr.parseUserJson(_res.data);
+                    axios.post("http://localhost:5000/api/v1/usuario", data)
+                        .catch(err => console.error(err.message));
+                }).catch(err => console.error(err.message));
+            res.redirect("/");
+        }).catch(err => console.error(err.message));
+})
+
 // Insertar Usuario
 app.post("/api/v1/usuario", async (req, res) => {
     try {
         const body = req.body;
-        const id = req.body.id;
         // Insertar usuario con datos de la API
         await pool.query(
             `INSERT INTO usuario(id, username, pp, global_rank, country_rank, playcount, play_time, avatar_url, created_at, updated_at, country) VALUES(${body.id}, '${body.username}', ${body.pp}, ${body.global_rank}, ${body.country_rank}, ${body.playcount}, ${body.play_time}, '${body.avatar_url}', current_timestamp, current_timestamp, '${body.country}') ON CONFLICT DO NOTHING`
         );
 
+        let badges = ftr.filterBadges(body.badges);
+
         // Insertar medallas en caso que el usuario tenga
-        if (body.badges.length !== 0){
+        if (badges.length !== 0){
             // Hacemos un GET para obtener la cantidad de medallas registradas hasta el momento
             let currentBadges;
             await axios.get("http://localhost:5000/api/v1/badge")
@@ -82,12 +98,12 @@ app.post("/api/v1/usuario", async (req, res) => {
                     currentTorneos = _res.data;
                 })
 
-            for (let i=0; i<body.badges.length; i++){
+            for (let i=0; i<badges.length; i++){
                 let skip = false;
 
                 // Omitir badges que ya existen en la tabla badges
                 for (let j=0; j<currentBadges.length; j++){
-                    if (body.badges[i].description === currentBadges[j]['descripcion']){
+                    if (badges[i].description === currentBadges[j]['descripcion']){
                         skip = true;
                         break;
                     }
@@ -97,12 +113,12 @@ app.post("/api/v1/usuario", async (req, res) => {
                 }
 
                 // Parseamos la medalla nueva en caso que tenga apostrofes '
-                const descripcion = ftr.parseBadge(body.badges[i].description);
+                const descripcion = ftr.parseBadge(badges[i].description);
 
                 // Insertamos la medalla en la tabla BADGES
                 try {
                     await pool.query(
-                        `INSERT INTO badge(descripcion, image_url) VALUES ('${descripcion}', '${body.badges[i]['image_url']}')`
+                        `INSERT INTO badge(descripcion, image_url) VALUES ('${descripcion}', '${badges[i]['image_url']}')`
                     );
                 } catch (err) {
                     console.error(err.message);
@@ -110,7 +126,7 @@ app.post("/api/v1/usuario", async (req, res) => {
 
                 // Omitir torneos que ya existen en la tabla torneos
                 for (let k=0; k<currentTorneos.length; k++){
-                    if (body.badges[i].description === currentTorneos[k]['nombre']){
+                    if (badges[i].description === currentTorneos[k]['nombre']){
                         skip = true;
                         break;
                     }
@@ -122,19 +138,19 @@ app.post("/api/v1/usuario", async (req, res) => {
                 // Insertamos un torneo mediante el nombre de la badge
                 try {
                     await pool.query(
-                        `INSERT INTO torneo(nombre, badged) VALUES ('${descripcion}', 'Si')`
+                        `INSERT INTO torneo(nombre, badge_id) VALUES ('${descripcion}', (SELECT id FROM badge b WHERE '${descripcion}' = b.descripcion))`
                     );
                 } catch (err) {
                     console.error(err.message);
                 }
             }
 
-            for (let j=0; j<body.badges.length; j++){
-                const descripcion = ftr.parseBadge(body.badges[j].description);
+            for (let j=0; j<badges.length; j++){
+                const descripcion = ftr.parseBadge(badges[j].description);
                 // Asignamos cada medalla del usuario con las medallas existentes de badges usando la tabla usuario_badge
                 try {
                     await pool.query(
-                        `INSERT INTO usuario_badge(user_id, badge_id) VALUES (${body.id}, (SELECT id FROM badge WHERE image_url = '${body.badges[j]['image_url']}'))`
+                        `INSERT INTO usuario_badge(user_id, badge_id) VALUES (${body.id}, (SELECT id FROM badge WHERE image_url = '${badges[j]['image_url']}'))`
                     );
                 } catch (err) {
                     console.error(err.message);
@@ -155,21 +171,42 @@ app.post("/api/v1/usuario", async (req, res) => {
     }
 })
 
-// Actualizar Usuario
-app.put("/api/v1/usuario/:id", async (req, res) => {
-    try {
-        const {id} = req.params;
-        const {region} = req.body;
-        let api;
-        // Obtenemos los datos de la API.
-        osu.getToken()
+app.post("/admin/update/usuario", async (req, res) => {
+    const {id} = req.body;
+    const {region} = req.body;
+    osu.getToken()
         .then((token) => {
             osu.getUserData(token, id)
                 .then((_res) => {
-                    api = osu.parseUserJson(_res.data);
+                    let data = ftr.parseUserJson(_res.data);
+                    axios.put("http://localhost:5000/admin/usuario", {id: id, region: region, api: data})
+                        .catch(err => console.error(err.message));
                 }).catch(err => console.error(err.message));
             res.redirect("/");
         }).catch(err => console.error(err.message));
+})
+
+app.delete("/admin/usuario/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query(
+            `DELETE FROM usuario WHERE id = ${id}`
+        );
+        res.json("Borrado!");
+    } catch (e){
+        console.log(e.message);
+    }
+})
+
+// Actualizar Usuario
+app.put("/admin/usuario", async (req, res) => {
+    try {
+        const {id} = req.body;
+        const {region} = req.body;
+        let {api} = req.body;
+
+        console.log(region);
+
         if (region !== undefined){
             await pool.query(
                 `UPDATE usuario SET username = '${api.username}', pp = ${api.pp}, global_rank = ${api.global_rank}, country_rank = ${api.country_rank}, playcount = ${api.playcount}, play_time = ${api.play_time}, avatar_url = '${api.avatar_url}', country = '${api.country}', region = '${region}', updated_at = current_timestamp WHERE id = ${id}`
@@ -179,48 +216,85 @@ app.put("/api/v1/usuario/:id", async (req, res) => {
                 `UPDATE usuario SET username = '${api.username}', pp = ${api.pp}, global_rank = ${api.global_rank}, country_rank = ${api.country_rank}, playcount = ${api.playcount}, play_time = ${api.play_time}, avatar_url = '${api.avatar_url}', country = '${api.country}', updated_at = current_timestamp WHERE id = ${id}`
             )
         }
-        if (api.badges.length !== 0){
+        let badges = ftr.filterBadges(api.badges);
+
+        if (badges.length !== 0){
             let userBadges;
             await axios.get("http://localhost:5000/api/v1/usuariobadges/" + id)
                 .then((_res) => {
                     userBadges = _res.data;
-                })
-            if (userBadges.length !== 0){
-                if (userBadges.length < api.badges.length){
+            })
+            let currentTorneos;
+            await axios.get("http://localhost:5000/api/v1/torneo")
+                .then((_res) => {
+                    currentTorneos = _res.data;
+            })
+            if (badges.length <= userBadges.length){
+                return;
+            }
+            for(let i=0; i<badges.length; i++){
+                let skip = false;
 
-                    for (let i=0; i<api.badges.length; i++){
-                        let skip = false;
-                        for (let j=0; i<userBadges.length; j++){
-                            if (api.badges[i].description === userBadges[j].description){
-                                skip = true;
-                            }
-                        }
-                        if (skip === true){
-                            continue;
-                        }
-
-                        // Parseamos la medalla nueva en caso que tenga apostrofes '
-                        const text = api.badges[i].description;
-                        const newtext = ftr.parseBadge(text);
-
-                        try {
-                            await pool.query(
-                                `INSERT INTO badge(descripcion, image_url) VALUES ('${newtext}', '${api.badges[i]['image_url']}')`
-                            );
-                        } catch (err) {
-                            console.error(err.message);
-                        }
+                // Omitir badges que ya existen en la tabla badges
+                for (let j=0; j<userBadges.length; j++){
+                    if (badges[i].description === userBadges[j]['descripcion']){
+                        skip = true;
+                        break;
                     }
+                }
+                if (skip === true){
+                    continue;
+                }
 
-                    for (let j=0; j<api.badges.length; j++){
-                        try {
-                            await pool.query(
-                                `INSERT INTO usuario_badge(user_id, badge_id) VALUES (${id}, (SELECT id FROM badge WHERE image_url = '${api.badges[j]['image_url']}'))`
-                            );
-                        } catch (err) {
-                            console.error(err.message);
-                        }
+                // Parseamos la medalla nueva en caso que tenga apostrofes '
+                const descripcion = ftr.parseBadge(badges[i].description);
+
+                // Insertamos la medalla en la tabla BADGES
+                try {
+                    await pool.query(
+                        `INSERT INTO badge(descripcion, image_url) VALUES ('${descripcion}', '${badges[i]['image_url']}')`
+                    );
+                } catch (err) {
+                    console.error(err.message);
+                }
+
+                // Omitir torneos que ya existen en la tabla torneos
+                for (let k=0; k<currentTorneos.length; k++){
+                    if (badges[i].description === currentTorneos[k]['nombre']){
+                        skip = true;
+                        break;
                     }
+                }
+                if (skip === true){
+                    continue;
+                }
+
+                // Insertamos un torneo mediante el nombre de la badge
+                try {
+                    await pool.query(
+                        `INSERT INTO torneo(nombre, badge_id) VALUES ('${descripcion}', (SELECT id FROM badge b WHERE '${descripcion}' = b.descripcion))`
+                    );
+                } catch (err) {
+                    console.error(err.message);
+                }
+            }
+            for (let j=0; j<badges.length; j++){
+                const descripcion = ftr.parseBadge(badges[j].description);
+                // Asignamos cada medalla del usuario con las medallas existentes de badges usando la tabla usuario_badge
+                try {
+                    await pool.query(
+                        `INSERT INTO usuario_badge(user_id, badge_id) VALUES (${body.id}, (SELECT id FROM badge WHERE image_url = '${badges[j]['image_url']}'))`
+                    );
+                } catch (err) {
+                    console.error(err.message);
+                }
+                // Asignamos al usuario los torneos correspondiente a sus medallas
+                try {
+                    await pool.query(
+                        `INSERT INTO usuario_torneo(user_id, torneo_id, estado) VALUES (${body.id}, (SELECT id FROM torneo WHERE nombre = '${descripcion}'), 'Ganado')`
+                    );
+                } catch (err) {
+                    console.error(err.message);
                 }
             }
         }
@@ -228,21 +302,6 @@ app.put("/api/v1/usuario/:id", async (req, res) => {
         console.error(err.message);
         res.status(500).send("Na q hacerle papito algo salio mal");
     }
-})
-
-// Insertar un usuario mediante la ID
-app.post("/admin/usuario", async (req, res) => {
-    let {id} = req.body;
-    osu.getToken()
-        .then((token) => {
-            osu.getUserData(token, id)
-                .then((_res) => {
-                    let data = osu.parseUserJson(_res.data);
-                    axios.post("http://localhost:5000/api/v1/usuario", data)
-                        .catch(err => console.error(err.message));
-                }).catch(err => console.error(err.message));
-            res.redirect("/");
-        }).catch(err => console.error(err.message));
 })
 
 //Periferico
@@ -265,7 +324,7 @@ app.get("/api/v1/usuarioperifericos/:id", async (req, res) => {
     try {
         const {id} = req.params;
         const torneos = await pool.query(
-            `SELECT p.marca, p.modelo, p.url, tp.tipo, up.config FROM periferico p JOIN tipo_periferico tp ON p.tipo_id = tp.id JOIN usuario_periferico up ON p.id = up.periferico_id JOIN usuario u ON u.id = ${id}`
+            `SELECT p.marca, p.modelo, p.url, tp.tipo, up.config FROM periferico p JOIN tipo_periferico tp ON p.tipo_id = tp.id JOIN usuario_periferico up ON p.id = up.periferico_id JOIN usuario u ON up.user_id = u.id AND u.id = ${id}`
         );
         res.status(200).json(torneos.rows);
     } catch (err) {
@@ -323,7 +382,7 @@ app.get("/api/v1/usuariotorneos/:id", async (req, res) => {
     try {
         const {id} = req.params;
         const torneos = await pool.query(
-            `SELECT t.id, t.name, t.rank_range, t.badged, t.prizepool, ut.estado FROM torneo t JOIN usuario_torneo ut ON t.id = ut.torneo_id JOIN usuario u ON u.id = ut.user_id AND u.id = ${id}`
+            `SELECT t.id, t.nombre, t.rank_range, t.badge_id, t.prizepool, ut.estado FROM torneo t JOIN usuario_torneo ut ON t.id = ut.torneo_id JOIN usuario u ON u.id = ut.user_id AND u.id = ${id}`
         );
         res.status(200).json(torneos.rows);
     } catch (err) {

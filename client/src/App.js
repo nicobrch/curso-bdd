@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import UserList from "./pages/Usuarios/UserList";
 import UsuarioPerfil from "./pages/Usuarios/UsuarioPerfil";
 import UsuarioInsert from "./pages/Usuarios/UsuarioInsert";
+import UsuarioEdit from "./pages/Usuarios/UsuarioEdit";
 
 const App = () => {
 
@@ -20,7 +21,8 @@ const App = () => {
                     <Route path="/" element={<Home/>}/>
                     <Route path="/usuarios" element={<UserList/>}/>
                     <Route path="/usuarios/:id" element={<UsuarioPerfil/>}/>
-                    <Route path="/admin/usuario" element={<UsuarioInsert/>}/>
+                    <Route path="/insert/usuario" element={<UsuarioInsert/>}/>
+                    <Route path="/editar/usuario/:id" element={<UsuarioEdit/>}/>
                 </Routes>
             </div>
         </Router>

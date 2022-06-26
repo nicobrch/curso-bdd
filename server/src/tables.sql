@@ -43,7 +43,7 @@ create table if not exists torneo(
     cover_url varchar,
     descripcion varchar,
     PRIMARY KEY (id),
-    constraint fk_badge foreign key (badge_id) references badge(id)
+    constraint fk_badge foreign key (badge_id) references badge(id) on delete set null
 );
 create table if not exists api_map(
     id int not null,
@@ -60,9 +60,9 @@ create table if not exists periferico(
     modelo varchar not null,
     url varchar,
     image_url varchar,
-    tipo_id int not null,
+    tipo_id int,
     PRIMARY KEY (id),
-    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id)
+    constraint fk_tipo foreign key (tipo_id) references tipo_periferico(id) on delete set null
 );
 create table if not exists usuario_periferico(
     id serial,
@@ -70,8 +70,8 @@ create table if not exists usuario_periferico(
     periferico_id int not null,
     config json,
     PRIMARY KEY (id),
-    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES usuario(id),
-    CONSTRAINT fk_periferico FOREIGN KEY(periferico_id) REFERENCES periferico(id)
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES usuario(id) on delete cascade,
+    CONSTRAINT fk_periferico FOREIGN KEY(periferico_id) REFERENCES periferico(id) on delete cascade
 );
 create table if not exists usuario_torneo(
     id serial,
@@ -79,8 +79,8 @@ create table if not exists usuario_torneo(
     torneo_id int not null,
     estado varchar,
     PRIMARY KEY (id),
-    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES usuario(id),
-    CONSTRAINT fk_torneo FOREIGN KEY(torneo_id) REFERENCES torneo(id)
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES usuario(id) on delete cascade,
+    CONSTRAINT fk_torneo FOREIGN KEY(torneo_id) REFERENCES torneo(id) on delete cascade
 );
 create table if not exists usuario_red(
     id serial,
@@ -88,16 +88,16 @@ create table if not exists usuario_red(
     red_id int not null,
     valor varchar,
     primary key (id),
-    constraint fk_user foreign key (user_id) references usuario(id),
-    constraint fk_red foreign key (red_id) references red_social(id)
+    constraint fk_user foreign key (user_id) references usuario(id) on delete cascade,
+    constraint fk_red foreign key (red_id) references red_social(id) on delete cascade
 );
 create table if not exists usuario_badge(
     id serial,
     user_id int not null,
     badge_id int not null,
     primary key (id),
-    constraint fk_user foreign key (user_id) references usuario(id),
-    constraint fk_badge foreign key (badge_id) references badge(id)
+    constraint fk_user foreign key (user_id) references usuario(id) on delete cascade,
+    constraint fk_badge foreign key (badge_id) references badge(id) on delete cascade
 );
 create table if not exists api_score(
     id int not null,
@@ -110,6 +110,6 @@ create table if not exists api_score(
     accuracy float not null,
     score int not null,
     primary key (id),
-    constraint fk_user foreign key (user_id) references usuario(id),
-    constraint fk_map foreign key (map_id) references api_map(id)
+    constraint fk_user foreign key (user_id) references usuario(id) on delete cascade,
+    constraint fk_map foreign key (map_id) references api_map(id) on delete cascade
 );

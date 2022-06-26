@@ -1,18 +1,20 @@
 import React, {useState} from "react";
-import styles from "./Usuario.module.css";
+import styles from "./Periferico.module.css";
 import {Row, Col, Form, FormGroup} from "react-bootstrap";
-import {postUser} from "../../Api";
+import {updateUser} from "../../Api";
 import toast, { Toaster } from "react-hot-toast";
+import {useParams} from "react-router-dom";
 
-const UsuarioInsert = () => {
+const PerifericoEdit = () => {
 
-    const [userId, setUserId] = useState("");
+    const [region, setRegion] = useState("");
+    const {id} = useParams();
 
     const onSubmitForm = async e => {
         e.preventDefault();
-        if (userId === ""){
+        if (region === ""){
             return (
-                toast.error('No ha ingresado ningun usuario',
+                toast.error('No ha ingresado ninguna region',
                     {
                         style : {
                             color: 'white',
@@ -22,8 +24,8 @@ const UsuarioInsert = () => {
             )
         }
         try {
-            await postUser(userId);
-            toast.success('Usuario insertado!',
+            await updateUser(id, region);
+            toast.success('Region insertada!',
                 {
                     style : {
                         color: 'white',
@@ -31,7 +33,7 @@ const UsuarioInsert = () => {
                     }
                 });
         } catch (err) {
-            toast.error('No se pudo insertar el usuario :(',
+            toast.error('No se pudo insertar la region :(',
                 {
                     style : {
                         color: 'white',
@@ -51,7 +53,7 @@ const UsuarioInsert = () => {
             <div className={`${styles.container} container align-self-center col-4 rounded`}>
             <Row>
                 <Col>
-                    <h1 className={styles.titulo}>Insertar nuevo Usuario</h1>
+                    <h1 className={styles.titulo}>Editar Usuario: {id}</h1>
                 </Col>
             </Row>
             <Row>
@@ -60,16 +62,16 @@ const UsuarioInsert = () => {
                         <FormGroup>
                             <Form.Control
                                 type="text"
-                                placeholder="osu! id"
-                                value={userId}
-                                onChange={e => setUserId(e.target.value)}
+                                placeholder="nombre de region"
+                                value={region}
+                                onChange={e => setRegion(e.target.value)}
                             />
                             <Form.Text className={styles.texto}>
-                                Solo la ID sin url
+                                Region
                             </Form.Text>
                         </FormGroup>
                         <button className={styles.insertar} type="submit">
-                            Insertar
+                            Editar y Actualizar
                         </button>
                     </Form>
                 </Col>
@@ -79,4 +81,4 @@ const UsuarioInsert = () => {
     );
 }
 
-export default UsuarioInsert;
+export default PerifericoEdit;

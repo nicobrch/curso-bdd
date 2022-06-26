@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Col, Row} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import styles from "./TableHeader.module.css";
 
@@ -31,8 +31,8 @@ class TableHeader extends Component {
                             <span className={styles.update}>{this.state.update}</span>
                         </div>
                         <div>
-                            <Link to={`../borrar/${this.state.identificador}`}>
-                                <button className={`${styles.boton} ${styles.Actualizar}`}>Actualizar</button>
+                            <Link to={`../editar/usuario/${this.state.identificador}`}>
+                                <button className={`${styles.boton} ${styles.Actualizar}`}>Editar</button>
                             </Link>
                             <Link to={`../borrar/${this.state.identificador}`}>
                                 <button className={`${styles.boton} ${styles.Borrar}`}>Borrar</button>

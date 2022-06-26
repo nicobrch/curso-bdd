@@ -1,10 +1,10 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
-import styles from "./Usuario.module.css";
+import styles from "./Periferico.module.css";
 import {deleteUser} from "../../Api";
 
-const Usuarios = ({datos}) => {
+const Perifericos = ({datos}) => {
 
     const deleteUsuario = async (id) => {
         try {
@@ -45,4 +45,4 @@ const Usuarios = ({datos}) => {
     )
 }
 
-export default Usuarios;
+export default Perifericos;

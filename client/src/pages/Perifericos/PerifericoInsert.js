@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import styles from "./Usuario.module.css";
+import styles from "./Periferico.module.css";
 import {Row, Col, Form, FormGroup} from "react-bootstrap";
 import {postUser} from "../../Api";
 import toast, { Toaster } from "react-hot-toast";
 
-const UsuarioInsert = () => {
+const PerifericoInsert = () => {
 
     const [userId, setUserId] = useState("");
 
@@ -79,4 +79,4 @@ const UsuarioInsert = () => {
     );
 }
 
-export default UsuarioInsert;
+export default PerifericoInsert;

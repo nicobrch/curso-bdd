@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
-import styles from "./Usuario.module.css";
+import styles from "./Periferico.module.css";
 import {fetchUser,  fetchUserPerifericos, fetchUserBadges, fetchUserTorneos} from "../../Api";
 import TableHeader from "../../components/TableHeader/TableHeader";
 import FeaturedInfo from "../../components/FeaturedInfo/FeaturedInfo";
