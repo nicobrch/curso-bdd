@@ -1,0 +1,93 @@
+.fondo{
+    flex: 4;
+    background-color: #2A2E3C;
+}
+
+.lista{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #2A2E3C;
+}
+
+.item{
+    margin-top: 7px;
+    padding: 7px;
+    border-radius: 10px;
+    background-color: #2A2E3C;
+    box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.1);
+}
+
+.badge{
+    margin-left: 5px;
+}
+
+.container{
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #191D2A;
+    box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.5);
+}
+
+.texto{
+    color: #B4B8C6;
+}
+
+.titulo{
+    color: #DADFED;
+    font-size: 42px;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+
+.textoTabla{
+    color: #D1D4DE;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tituloTabla{
+    color: #DADFED;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.avatar{
+    height: 40px;
+    width: 40px;
+    border-radius: 25%;
+    object-fit: cover;
+}
+
+.boton {
+    border: none;
+    border-radius: 5px;
+    padding: 4px 8px;
+    background-color: #3bb077;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.Editar{
+    background-color: #3bb077;
+    color: white;
+}
+
+.Borrar{
+    background-color: #DA4040;
+    color: white;
+}
+
+.insertar{
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    background-color: #3B97B0;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 17px;
+}

@@ -1,22 +1,22 @@
 import React, {useEffect, useState} from "react";
-import styles from "./Usuario.module.css";
-import {fetchUsers} from "../../Api";
+import styles from "./Torneo.module.css";
+import {fetchTorneos} from "../../Api";
 import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
-import Usuarios from "./Usuarios";
+import Torneos from "./Torneos";
 import Pagination from "../../components/Pagination/Pagination";
 import {CircularProgress} from "@mui/material";
-import {Toaster} from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
-const UserList = () => {
+const TorneoList = () => {
     const [datos, setDatos] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemPerPage, setItemPerPage] = useState(10);
+    const [itemPerPage, setItemPerPage] = useState(8);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
-        fetchUsers().then(d => setDatos(d));
+        fetchTorneos().then(d => setDatos(d));
         setTimeout(() => {
             setLoading(false);
         }, 250)
@@ -46,28 +46,25 @@ const UserList = () => {
             <div className={`${styles.container} container rounded`}>
                 <Row>
                     <Col>
-                        <h1 className={styles.titulo}>Usuarios</h1>
+                        <h1 className={styles.titulo}>Torneos</h1>
                     </Col>
                     <Col align="right">
-                        <Link to="../insert/usuario">
-                            <button className={styles.insertar}>Insertar Nuevo Usuario</button>
+                        <Link to="../insert/torneo">
+                            <button className={styles.insertar}>Insertar Nuevo Torneo</button>
                         </Link>
                     </Col>
                 </Row>
                 <Row>
                     <Col xs={1} className="text-center"><span className={styles.tituloTabla}>ID</span></Col>
-                    <Col xs={3} className="text-center"><span className={styles.tituloTabla}>Usuario</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Nacional</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Global</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>PP</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Playcount</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Pais</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Region</span></Col>
+                    <Col xs={3} className="text-center"><span className={styles.tituloTabla}>Nombre</span></Col>
+                    <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Rank</span></Col>
+                    <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Prize</span></Col>
+                    <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Formato</span></Col>
                     <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Accion</span></Col>
                 </Row>
-                    <Usuarios datos={currentItems}/>
+                    <Torneos datos={currentItems}/>
                 <Row>
-                <Pagination 
+                <Pagination
                 itemsPerPage={itemPerPage}
                 totalItems={datos.length}
                 paginate={paginate}
@@ -78,4 +75,4 @@ const UserList = () => {
     );
 }
 
-export default UserList;
+export default TorneoList;

@@ -51,7 +51,7 @@ export const fetchUserTorneos = (id) => {
 };
 
 export const fetchUserPerifericos = (id) => {
-    console.log('Fetching User Perifericos...');
+    console.log('Fetching User Torneos...');
     return axios
         .get(apiUrl + '/usuarioperifericos/' + id);
 };
@@ -68,6 +68,28 @@ export const fetchTorneos = () => {
     console.log('Fetching Torneos...');
     return axios
         .get(apiUrl + '/torneo')
+        .then(res => res.data)
+        .catch(err => console.error(err.message));
+};
+
+export const postTorneo = (nombre, rank, prize, formato) => {
+    console.log('Inserting Torneo...');
+    return axios
+        .post(adminUrl + '/torneo', {nombre: nombre, rank: rank, prize: prize, formato: formato, headers: { Accept : 'application/json'}})
+        .then(res => res.data)
+        .catch(err => console.error(err.message));
+};
+
+export const deleteTorneo = (id) => {
+    console.log('Deleting Torneo...');
+    return axios
+        .delete(adminUrl + '/torneo/' + id);
+};
+
+export const updateTorneo = (id, nombre, rank, prize, formato) => {
+    console.log('Updating Torneo...');
+    return axios
+        .put(adminUrl + '/torneo/' + id, {nombre: nombre, rank: rank, prize: prize, formato: formato, headers: { Accept : 'application/json'}})
         .then(res => res.data)
         .catch(err => console.error(err.message));
 };

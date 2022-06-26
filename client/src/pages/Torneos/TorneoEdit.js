@@ -1,23 +1,24 @@
 import React, {useState, useEffect} from "react";
-import styles from "./Periferico.module.css";
+import styles from "./Torneo.module.css";
 import {Row, Col, Form, FormGroup} from "react-bootstrap";
-import {updatePeriferico, fetchPeriferico} from "../../Api";
+import {updateTorneo, fetchTorneo} from "../../Api";
 import toast, { Toaster } from "react-hot-toast";
 import {useParams} from "react-router-dom";
 import {CircularProgress} from "@mui/material";
 
-const PerifericoEdit = () => {
+const TorneoEdit = () => {
 
     const {id} = useParams();
     const [data, setData] = useState(null);
-    const [marca, setMarca] = useState("");
-    const [modelo, setModelo] = useState("");
-    const [tipo, setTipo] = useState("");
+    const [nombre, setNombre] = useState("");
+    const [rank, setRank] = useState("");
+    const [prize, setPrize] = useState("");
+    const [formato, setFormato] = useState("");
     const [loading, setLoading] = useState(true);
 
     const onSubmitForm = async e => {
         e.preventDefault();
-        if (marca === "" || modelo === "" || tipo === ""){
+        if (nombre === "" || rank === "" || prize === "" || formato === ""){
             return (
                 toast.error('Rellene todos los campos',
                     {
@@ -29,8 +30,8 @@ const PerifericoEdit = () => {
             )
         }
         try {
-            await updatePeriferico(id, marca, modelo, tipo);
-            toast.success('Periferico actualizado!',
+            await updateTorneo(id, nombre, rank, prize, formato);
+            toast.success('Torneo actualizado!',
                 {
                     style : {
                         color: 'white',
@@ -38,7 +39,7 @@ const PerifericoEdit = () => {
                     }
                 });
         } catch (err) {
-            toast.error('No se pudo insertar el usuario :(',
+            toast.error('No se pudo actualizar el torneo :(',
                 {
                     style : {
                         color: 'white',
@@ -51,7 +52,7 @@ const PerifericoEdit = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetchPeriferico(id).then(d => setData(d));
+        fetchTorneo(id).then(d => setData(d));
         setTimeout(() => {
             setLoading(false);
         }, 250)
@@ -76,7 +77,7 @@ const PerifericoEdit = () => {
             <div className={`${styles.container} container align-self-center col-5 rounded`}>
             <Row>
                 <Col>
-                    <h1 className={styles.titulo}>Editar Periferico: {id}</h1>
+                    <h1 className={styles.titulo}>Editar Torneo: {id}</h1>
                 </Col>
             </Row>
             <Row>
@@ -85,30 +86,39 @@ const PerifericoEdit = () => {
                         <FormGroup>
                             <Form.Control
                                 type="text"
-                                placeholder={data.data['marca']}
-                                value={marca}
-                                onChange={e => setMarca(e.target.value)}
+                                placeholder={data['nombre']}
+                                value={nombre}
+                                onChange={e => setNombre(e.target.value)}
                             />
                             <Form.Text className={styles.texto}>
-                                Texto
+                                Nombre
                             </Form.Text>
                             <Form.Control
                                 type="text"
-                                placeholder={data.data['modelo']}
-                                value={modelo}
-                                onChange={e => setModelo(e.target.value)}
+                                placeholder={data['rank_range']}
+                                value={rank}
+                                onChange={e => setRank(e.target.value)}
                             />
                             <Form.Text className={styles.texto}>
-                                Texto
+                                Rank Range
                             </Form.Text>
-                            <Form.Select value={tipo} onChange={e => setTipo(e.target.value)}>
-                                <option>Mouse</option>
-                                <option>Teclado</option>
-                                <option>Monitor</option>
-                                <option>Tablet</option>
-                            </Form.Select>
+                            <Form.Control
+                                type="text"
+                                placeholder={data['prizepool']}
+                                value={prize}
+                                onChange={e => setPrize(e.target.value)}
+                            />
                             <Form.Text className={styles.texto}>
-                                {data.data['tipo']}
+                                Prizepool
+                            </Form.Text>
+                            <Form.Control
+                                type="text"
+                                placeholder={data['formato']}
+                                value={formato}
+                                onChange={e => setFormato(e.target.value)}
+                            />
+                            <Form.Text className={styles.texto}>
+                                Formato
                             </Form.Text>
                         </FormGroup>
                         <button className={styles.insertar} type="submit">
@@ -122,4 +132,4 @@ const PerifericoEdit = () => {
     );
 }
 
-export default PerifericoEdit;
+export default TorneoEdit;

@@ -12,6 +12,9 @@ import UsuarioEdit from "./pages/Usuarios/UsuarioEdit";
 import PerifericoList from "./pages/Perifericos/PerifericoList";
 import PerifericoInsert from "./pages/Perifericos/PerifericoInsert";
 import PerifericoEdit from "./pages/Perifericos/PerifericoEdit";
+import TorneoList from "./pages/Torneos/TorneoList";
+import TorneoEdit from "./pages/Torneos/TorneoEdit";
+import TorneoInsert from "./pages/Torneos/TorneoInsert";
 
 const App = () => {
 
@@ -30,6 +33,10 @@ const App = () => {
                     <Route path="/perifericos" element={<PerifericoList/>}/>
                     <Route path="/perifericos/:id" element={<PerifericoEdit/>}/>
                     <Route path="/insert/periferico" element={<PerifericoInsert/>}/>
+
+                    <Route path="/torneos" element={<TorneoList/>}/>
+                    <Route path="/torneos/:id" element={<TorneoEdit/>}/>
+                    <Route path="/insert/torneo" element={<TorneoInsert/>}/>
                 </Routes>
             </div>
         </Router>

@@ -6,6 +6,7 @@ import {Row, Col} from "react-bootstrap";
 import Perifericos from "./Perifericos";
 import Pagination from "../../components/Pagination/Pagination";
 import {CircularProgress} from "@mui/material";
+import {Toaster} from "react-hot-toast";
 
 const PerifericoList = () => {
     const [datos, setDatos] = useState(null);
@@ -38,6 +39,10 @@ const PerifericoList = () => {
 
     return (
         <div className={styles.fondo}>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
             <div className={`${styles.container} container rounded`}>
                 <Row>
                     <Col>

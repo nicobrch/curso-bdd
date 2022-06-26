@@ -30,10 +30,6 @@ class Sidebar extends Component {
                             <EmojiEvents className={styles.icon}/>
                             Torneos
                         </SidebarItem>
-                        <SidebarItem link={'/badges'}>
-                            <WorkspacePremium className={styles.icon}/>
-                            Badges
-                        </SidebarItem>
                     </SidebarMenu>
                 </div>
             </div>

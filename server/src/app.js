@@ -29,7 +29,7 @@ app.get("/oauth-callback", ({query : {code}}, res) => {
         }).catch(err => console.error(err.message));
 })
 
-// Perifericos
+// Torneos
 
 // Obtener todos los usuarios
 app.get("/api/v1/usuario", async (req, res) => {
@@ -337,7 +337,7 @@ app.get("/api/v1/usuarioperifericos/:id", async (req, res) => {
     try {
         const {id} = req.params;
         const torneos = await pool.query(
-            `SELECT p.marca, p.modelo, p.url, tp.tipo, up.config FROM periferico p JOIN tipo_periferico tp ON p.tipo_id = tp.id JOIN usuario_periferico up ON p.id = up.periferico_id JOIN usuario u ON up.user_id = u.id AND u.id = ${id}`
+            `SELECT p.id, p.marca, p.modelo, p.url, tp.tipo, up.config FROM periferico p JOIN tipo_periferico tp ON p.tipo_id = tp.id JOIN usuario_periferico up ON p.id = up.periferico_id JOIN usuario u ON up.user_id = u.id AND u.id = ${id}`
         );
         res.status(200).json(torneos.rows);
     } catch (err) {
@@ -425,9 +425,22 @@ app.get("/api/v1/usuariobadges/:id", async (req, res) => {
 app.get("/api/v1/torneo", async (req, res) => {
     try {
         const torneos = await pool.query(
-            `SELECT * FROM torneo`
+            `SELECT * FROM torneo order by nombre`
         );
         res.status(200).json(torneos.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+app.get("/api/v1/torneo/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        const torneos = await pool.query(
+            `SELECT * FROM torneo WHERE id = ${id}`
+        );
+        res.status(200).json(torneos.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send(err.message);
@@ -445,6 +458,51 @@ app.get("/api/v1/usuariotorneos/:id", async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send(err.message);
+    }
+})
+
+app.post("/admin/torneo", async (req, res) => {
+    const {nombre} = req.body;
+    const {rank} = req.body;
+    const {prize} = req.body;
+    const {formato} = req.body;
+
+    try {
+        await pool.query(
+            `INSERT INTO torneo(nombre, rank_range, prizepool, formato) VALUES ('${nombre}', '${rank}', '${prize}', '${formato}')`
+        )
+        res.json("Torneo insertado!");
+    } catch (e){
+        console.log(e.message);
+    }
+})
+
+app.put("/admin/torneo/:id", async (req, res) => {
+    const {id} = req.params;
+    const {nombre} = req.body;
+    const {rank} = req.body;
+    const {prize} = req.body;
+    const {formato} = req.body;
+
+    try {
+        await pool.query(
+            `UPDATE torneo SET nombre = '${nombre}', rank_range = '${rank}', prizepool = '${prize}', formato = '${formato}' WHERE id = ${id}`
+        )
+        res.json("Torneo actualizado!");
+    } catch (e){
+        console.log(e.message);
+    }
+})
+
+app.delete("/admin/torneo/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query(
+            `DELETE FROM torneo WHERE id = ${id}`
+        );
+        res.json("Borrado!");
+    } catch (e){
+        console.log(e.message);
     }
 })
 

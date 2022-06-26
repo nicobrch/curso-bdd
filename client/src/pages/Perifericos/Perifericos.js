@@ -3,12 +3,20 @@ import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
 import styles from "./Periferico.module.css";
 import {deletePeriferico} from "../../Api";
+import toast from "react-hot-toast";
 
 const Perifericos = ({datos}) => {
 
     const borrarPeriferico = async (id) => {
         try {
             await deletePeriferico(id);
+            toast.success('Periferico borrado! Reinicia la página',
+                {
+                    style : {
+                        color: 'white',
+                        background: '#D85151',
+                    }
+                });
         } catch(e) {
             console.log(e.message);
         }

@@ -2,7 +2,7 @@ import {Component} from "react";
 import {Mouse, Keyboard, BorderColor, Monitor} from "@mui/icons-material"
 import styles from "./FeaturedInfo.module.css";
 import {Col, Card, Button, Row} from "react-bootstrap";
-import {Icon} from "@mui/material";
+import {Link} from "react-router-dom";
 
 class FeaturedInfo extends Component{
     constructor(props) {
@@ -74,10 +74,12 @@ class FeaturedInfo extends Component{
                         </Row>
                         <Row>
                             <Col>
-                                <Button variant="primary" id={this.state.tipo} onClick={this.handleConfig}>Config</Button>
+                                <Button variant="primary" onClick={this.handleConfig}>Config</Button>
                             </Col>
                             <Col>
-                                <Button variant="warning">Editar</Button>
+                                <Link to={`../perifericos/${this.state.identificador}`}>
+                                    <Button variant="warning">Editar</Button>
+                                </Link>
                             </Col>
                         </Row>
                     </Card.Body>

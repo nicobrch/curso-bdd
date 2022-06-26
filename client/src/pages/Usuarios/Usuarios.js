@@ -3,12 +3,20 @@ import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
 import styles from "./Usuario.module.css";
 import {deleteUser} from "../../Api";
+import toast from "react-hot-toast";
 
 const Usuarios = ({datos}) => {
 
     const deleteUsuario = async (id) => {
         try {
             await deleteUser(id);
+            toast.success('Usuario borrado! Reinicia la página',
+                {
+                    style : {
+                        color: 'white',
+                        background: '#D85151',
+                    }
+                });
         } catch(e) {
             console.log(e.message);
         }
