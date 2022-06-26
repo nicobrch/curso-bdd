@@ -9,6 +9,9 @@ import UserList from "./pages/Usuarios/UserList";
 import UsuarioPerfil from "./pages/Usuarios/UsuarioPerfil";
 import UsuarioInsert from "./pages/Usuarios/UsuarioInsert";
 import UsuarioEdit from "./pages/Usuarios/UsuarioEdit";
+import PerifericoList from "./pages/Perifericos/PerifericoList";
+import PerifericoInsert from "./pages/Perifericos/PerifericoInsert";
+import PerifericoEdit from "./pages/Perifericos/PerifericoEdit";
 
 const App = () => {
 
@@ -23,6 +26,10 @@ const App = () => {
                     <Route path="/usuarios/:id" element={<UsuarioPerfil/>}/>
                     <Route path="/insert/usuario" element={<UsuarioInsert/>}/>
                     <Route path="/editar/usuario/:id" element={<UsuarioEdit/>}/>
+
+                    <Route path="/perifericos" element={<PerifericoList/>}/>
+                    <Route path="/perifericos/:id" element={<PerifericoEdit/>}/>
+                    <Route path="/insert/periferico" element={<PerifericoInsert/>}/>
                 </Routes>
             </div>
         </Router>

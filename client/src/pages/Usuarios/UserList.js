@@ -5,21 +5,27 @@ import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
 import Usuarios from "./Usuarios";
 import Pagination from "../../components/Pagination/Pagination";
+import {CircularProgress} from "@mui/material";
 
 const UserList = () => {
     const [datos, setDatos] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState(10);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         fetchUsers().then(d => setDatos(d));
+        setTimeout(() => {
+            setLoading(false);
+        }, 250)
     }, []);
 
-    if (datos === null){
+    if (loading === true){
         return (
             <div className={styles.fondo}>
-                <div className="container rounded">
-                    <h1 className={styles.titulo}>Cargando...</h1>
+                <div className="container justify-content-center align-content-center">
+                    <CircularProgress/>
                 </div>
             </div>
         )

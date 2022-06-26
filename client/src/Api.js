@@ -56,15 +56,6 @@ export const fetchUserPerifericos = (id) => {
         .get(apiUrl + '/usuarioperifericos/' + id);
 };
 
-export const fetchUserConfig = (tipo, id) => {
-    console.log('Fetching User Mouse Config...');
-    tipo.toLowerCase();
-    return axios
-        .get(apiUrl + '/user' + tipo + '/' + id)
-        .then(res => res.data)
-        .catch(err => console.error(err.message));
-};
-
 export const fetchTorneo = (id) => {
     console.log('Fetching Torneo...');
     return axios
@@ -84,7 +75,27 @@ export const fetchTorneos = () => {
 export const fetchPeriferico = (id) => {
     console.log('Fetching Periferico...');
     return axios
-        .get(apiUrl + '/periferico/' + id)
+        .get(apiUrl + '/periferico/' + id);
+};
+
+export const postPeriferico = (marca, modelo, tipo) => {
+    console.log('Inserting Periferico...');
+    return axios
+        .post(adminUrl + '/periferico', {marca: marca, modelo: modelo, tipo: tipo, headers: { Accept : 'application/json'}})
+        .then(res => res.data)
+        .catch(err => console.error(err.message));
+};
+
+export const deletePeriferico = (id) => {
+    console.log('Deleting Periferico...');
+    return axios
+        .delete(adminUrl + '/periferico/' + id);
+};
+
+export const updatePeriferico = (id, marca, modelo, tipo) => {
+    console.log('Updating Periferico...');
+    return axios
+        .put(adminUrl + '/periferico/' + id, {marca: marca, modelo: modelo, tipo: tipo, headers: { Accept : 'application/json'}})
         .then(res => res.data)
         .catch(err => console.error(err.message));
 };

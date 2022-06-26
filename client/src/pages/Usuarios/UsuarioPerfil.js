@@ -37,7 +37,7 @@ const Usuario = () => {
         getData();
         setTimeout(() => {
             setLoading(false);
-        }, 500)
+        }, 250)
     }, []);
 
     if (loading === true){
@@ -70,6 +70,7 @@ const Usuario = () => {
                 <Row>
                     {periferico.map(prf => (
                         <FeaturedInfo
+                            identificador={prf['id']}
                             tipo={prf['tipo']}
                             icon={prf['tipo']}
                             marca={prf.marca}

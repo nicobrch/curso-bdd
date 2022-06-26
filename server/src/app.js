@@ -310,9 +310,22 @@ app.put("/admin/usuario", async (req, res) => {
 app.get("/api/v1/periferico", async (req, res) => {
     try {
         const periferico = await pool.query(
-            `SELECT * FROM periferico p JOIN tipo_periferico tp on p.tipo_id = tp.id`
+            `SELECT p.id, p.marca, p.modelo, tp.tipo FROM periferico p JOIN tipo_periferico tp on p.tipo_id = tp.id order by marca`
         );
         res.status(200).json(periferico.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+app.get("/api/v1/periferico/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        const periferico = await pool.query(
+            `SELECT p.id, p.marca, p.modelo, tp.tipo FROM periferico p JOIN tipo_periferico tp on p.tipo_id = tp.id and p.id = ${id}`
+        );
+        res.status(200).json(periferico.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send(err.message);
@@ -330,6 +343,50 @@ app.get("/api/v1/usuarioperifericos/:id", async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send(err.message);
+    }
+})
+
+app.post("/admin/periferico", async (req, res) => {
+    const {marca} = req.body;
+    const {modelo} = req.body;
+    const {tipo} = req.body;
+
+    try {
+        await pool.query(
+            `INSERT INTO periferico(marca, modelo, tipo_id) VALUES ('${marca}', '${modelo}', (SELECT id FROM tipo_periferico WHERE tipo = '${tipo}'))`
+        )
+        res.json("Periferico insertado!");
+    } catch (e){
+        console.log(e.message);
+    }
+})
+
+app.put("/admin/periferico/:id", async (req, res) => {
+    const {id} = req.params;
+    const {marca} = req.body;
+    const {modelo} = req.body;
+    const {tipo} = req.body;
+    console.log("Holaaa");
+
+    try {
+        await pool.query(
+            `UPDATE periferico SET marca = '${marca}', modelo = '${modelo}', tipo_id = (SELECT id FROM tipo_periferico WHERE tipo = '${tipo}') WHERE id = ${id}`
+        )
+        res.json("Periferico actualizado!");
+    } catch (e){
+        console.log(e.message);
+    }
+})
+
+app.delete("/admin/periferico/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query(
+            `DELETE FROM periferico WHERE id = ${id}`
+        );
+        res.json("Borrado!");
+    } catch (e){
+        console.log(e.message);
     }
 })
 

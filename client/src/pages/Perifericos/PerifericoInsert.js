@@ -1,18 +1,20 @@
 import React, {useState} from "react";
 import styles from "./Periferico.module.css";
 import {Row, Col, Form, FormGroup} from "react-bootstrap";
-import {postUser} from "../../Api";
+import {postPeriferico} from "../../Api";
 import toast, { Toaster } from "react-hot-toast";
 
 const PerifericoInsert = () => {
 
-    const [userId, setUserId] = useState("");
+    const [marca, setMarca] = useState("");
+    const [modelo, setModelo] = useState("");
+    const [tipo, setTipo] = useState("");
 
     const onSubmitForm = async e => {
         e.preventDefault();
-        if (userId === ""){
+        if (marca === "" || modelo === "" || tipo === ""){
             return (
-                toast.error('No ha ingresado ningun usuario',
+                toast.error('Rellene todos los campos',
                     {
                         style : {
                             color: 'white',
@@ -22,8 +24,8 @@ const PerifericoInsert = () => {
             )
         }
         try {
-            await postUser(userId);
-            toast.success('Usuario insertado!',
+            await postPeriferico(marca, modelo, tipo);
+            toast.success('Periferico insertado!',
                 {
                     style : {
                         color: 'white',
@@ -51,7 +53,7 @@ const PerifericoInsert = () => {
             <div className={`${styles.container} container align-self-center col-4 rounded`}>
             <Row>
                 <Col>
-                    <h1 className={styles.titulo}>Insertar nuevo Usuario</h1>
+                    <h1 className={styles.titulo}>Insertar nuevo Periferico</h1>
                 </Col>
             </Row>
             <Row>
@@ -60,12 +62,30 @@ const PerifericoInsert = () => {
                         <FormGroup>
                             <Form.Control
                                 type="text"
-                                placeholder="osu! id"
-                                value={userId}
-                                onChange={e => setUserId(e.target.value)}
+                                placeholder="Marca"
+                                value={marca}
+                                onChange={e => setMarca(e.target.value)}
                             />
                             <Form.Text className={styles.texto}>
-                                Solo la ID sin url
+                                Texto
+                            </Form.Text>
+                            <Form.Control
+                                type="text"
+                                placeholder="Modelo"
+                                value={modelo}
+                                onChange={e => setModelo(e.target.value)}
+                            />
+                            <Form.Text className={styles.texto}>
+                                Texto
+                            </Form.Text>
+                            <Form.Select value={tipo} onChange={e => setTipo(e.target.value)}>
+                                <option>Mouse</option>
+                                <option>Teclado</option>
+                                <option>Monitor</option>
+                                <option>Tablet</option>
+                            </Form.Select>
+                            <Form.Text className={styles.texto}>
+                                Opcion
                             </Form.Text>
                         </FormGroup>
                         <button className={styles.insertar} type="submit">

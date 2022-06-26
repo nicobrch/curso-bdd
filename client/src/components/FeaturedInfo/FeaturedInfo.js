@@ -8,6 +8,7 @@ class FeaturedInfo extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            identificador : this.props.identificador,
             tipo : this.props.tipo,
             icon : this.props.icon,
             marca : this.props.marca,

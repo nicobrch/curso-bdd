@@ -1,20 +1,25 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./Periferico.module.css";
 import {Row, Col, Form, FormGroup} from "react-bootstrap";
-import {updateUser} from "../../Api";
+import {updatePeriferico, fetchPeriferico} from "../../Api";
 import toast, { Toaster } from "react-hot-toast";
 import {useParams} from "react-router-dom";
+import {CircularProgress} from "@mui/material";
 
 const PerifericoEdit = () => {
 
-    const [region, setRegion] = useState("");
     const {id} = useParams();
+    const [data, setData] = useState(null);
+    const [marca, setMarca] = useState("");
+    const [modelo, setModelo] = useState("");
+    const [tipo, setTipo] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const onSubmitForm = async e => {
         e.preventDefault();
-        if (region === ""){
+        if (marca === "" || modelo === "" || tipo === ""){
             return (
-                toast.error('No ha ingresado ninguna region',
+                toast.error('Rellene todos los campos',
                     {
                         style : {
                             color: 'white',
@@ -24,8 +29,8 @@ const PerifericoEdit = () => {
             )
         }
         try {
-            await updateUser(id, region);
-            toast.success('Region insertada!',
+            await updatePeriferico(id, marca, modelo, tipo);
+            toast.success('Periferico actualizado!',
                 {
                     style : {
                         color: 'white',
@@ -33,7 +38,7 @@ const PerifericoEdit = () => {
                     }
                 });
         } catch (err) {
-            toast.error('No se pudo insertar la region :(',
+            toast.error('No se pudo insertar el usuario :(',
                 {
                     style : {
                         color: 'white',
@@ -44,16 +49,34 @@ const PerifericoEdit = () => {
         }
     };
 
+    useEffect(() => {
+        setLoading(true);
+        fetchPeriferico(id).then(d => setData(d));
+        setTimeout(() => {
+            setLoading(false);
+        }, 250)
+    }, []);
+
+    if (loading === true){
+        return (
+            <div className={styles.fondo}>
+                <div className="container justify-content-center align-content-center">
+                    <CircularProgress/>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className={styles.fondo}>
             <Toaster
                 position="top-right"
                 reverseOrder={false}
             />
-            <div className={`${styles.container} container align-self-center col-4 rounded`}>
+            <div className={`${styles.container} container align-self-center col-5 rounded`}>
             <Row>
                 <Col>
-                    <h1 className={styles.titulo}>Editar Usuario: {id}</h1>
+                    <h1 className={styles.titulo}>Editar Periferico: {id}</h1>
                 </Col>
             </Row>
             <Row>
@@ -62,12 +85,30 @@ const PerifericoEdit = () => {
                         <FormGroup>
                             <Form.Control
                                 type="text"
-                                placeholder="nombre de region"
-                                value={region}
-                                onChange={e => setRegion(e.target.value)}
+                                placeholder={data.data['marca']}
+                                value={marca}
+                                onChange={e => setMarca(e.target.value)}
                             />
                             <Form.Text className={styles.texto}>
-                                Region
+                                Texto
+                            </Form.Text>
+                            <Form.Control
+                                type="text"
+                                placeholder={data.data['modelo']}
+                                value={modelo}
+                                onChange={e => setModelo(e.target.value)}
+                            />
+                            <Form.Text className={styles.texto}>
+                                Texto
+                            </Form.Text>
+                            <Form.Select value={tipo} onChange={e => setTipo(e.target.value)}>
+                                <option>Mouse</option>
+                                <option>Teclado</option>
+                                <option>Monitor</option>
+                                <option>Tablet</option>
+                            </Form.Select>
+                            <Form.Text className={styles.texto}>
+                                {data.data['tipo']}
                             </Form.Text>
                         </FormGroup>
                         <button className={styles.insertar} type="submit">

@@ -1,25 +1,31 @@
 import React, {useEffect, useState} from "react";
 import styles from "./Periferico.module.css";
-import {fetchUsers} from "../../Api";
+import {fetchPerifericos} from "../../Api";
 import {Link} from "react-router-dom";
 import {Row, Col} from "react-bootstrap";
 import Perifericos from "./Perifericos";
 import Pagination from "../../components/Pagination/Pagination";
+import {CircularProgress} from "@mui/material";
 
 const PerifericoList = () => {
     const [datos, setDatos] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState(10);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchUsers().then(d => setDatos(d));
+        setLoading(true);
+        fetchPerifericos().then(d => setDatos(d));
+        setTimeout(() => {
+            setLoading(false);
+        }, 250)
     }, []);
 
-    if (datos === null){
+    if (loading === true){
         return (
             <div className={styles.fondo}>
-                <div className="container rounded">
-                    <h1 className={styles.titulo}>Cargando...</h1>
+                <div className="container justify-content-center align-content-center">
+                    <CircularProgress/>
                 </div>
             </div>
         )
@@ -35,23 +41,19 @@ const PerifericoList = () => {
             <div className={`${styles.container} container rounded`}>
                 <Row>
                     <Col>
-                        <h1 className={styles.titulo}>Usuarios</h1>
+                        <h1 className={styles.titulo}>Perifericos</h1>
                     </Col>
                     <Col align="right">
-                        <Link to="../insert/usuario">
-                            <button className={styles.insertar}>Insertar Nuevo Usuario</button>
+                        <Link to="../insert/periferico">
+                            <button className={styles.insertar}>Insertar Nuevo Periferico</button>
                         </Link>
                     </Col>
                 </Row>
                 <Row>
                     <Col xs={1} className="text-center"><span className={styles.tituloTabla}>ID</span></Col>
-                    <Col xs={3} className="text-center"><span className={styles.tituloTabla}>Usuario</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Nacional</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Global</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>PP</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Playcount</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Pais</span></Col>
-                    <Col xs={1} className="text-center"><span className={styles.tituloTabla}>Region</span></Col>
+                    <Col xs={3} className="text-center"><span className={styles.tituloTabla}>Marca</span></Col>
+                    <Col xs={4} className="text-center"><span className={styles.tituloTabla}>Modelo</span></Col>
+                    <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Tipo</span></Col>
                     <Col xs={2} className="text-center"><span className={styles.tituloTabla}>Accion</span></Col>
                 </Row>
                     <Perifericos datos={currentItems}/>
